@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PLOTS_DIR = os.path.join(CURRENT_DIR, "plots")
 BASE_COLORS = {
@@ -19,17 +20,13 @@ BASE_COLORS = {
 }
 
 
+dataset_name = "Online_Retail.csv"
+df = pd.read_csv(dataset_name, encoding='windows-1252')
 
 
-placeholder = "Online_Retail.csv"
-df = pd.read_csv(placeholder, encoding='windows-1252')
-
-df = df.dropna(subset=["CustomerID"])
-print(df.columns)
-print('Orinal Data')
-print(df.describe())
-print(df.head())
-print(df.isna().sum())
+###################################################
+# Data Preprocessing Start
+###################################################
 
 df.dropna(subset=['CustomerID'], inplace=True)
 
@@ -42,37 +39,23 @@ df = df.groupby('CustomerID').agg(
     # Frequency=('InvoiceDate', lambda x: (x.max()-x.min()).days / x.nunique() if x.nunique()>1 else 1)  # Frequenza acquisti
 ).reset_index()
 
-
-df_sorted = df.sort_values("CustomerLifetimeValue")
-print(df_sorted[['CustomerID', 'CustomerLifetimeValue', 'AvgSpesa']].head(30))
-print(df_sorted[['CustomerID', 'CustomerLifetimeValue', 'AvgSpesa']].tail(30))
-
-print(df.head())
-
-
-###################################################
-# Data Preprocessing Start
-###################################################
-
-print("Data Processing...")
-
 # Scaling
-feat_for_clustering = ['CustomerLifetimeValue', 'AvgSpesa']  #PLACEHOLDER
-feat_scaled = ['SCALED_CustomerLifetimeValue', 'SCALED_AvgSpesa'] #PLACEHOLDER
+feat_for_clustering = ['CustomerLifetimeValue', 'AvgSpesa'] #PLACEHOLDER
+feat_scaled = [f"SCALED_{feat}" for feat in feat_for_clustering]
 scaler = StandardScaler()
 df[feat_scaled] = scaler.fit_transform(df[feat_for_clustering])
 df[feat_scaled] = df[feat_scaled].to_numpy()
 
-print('DESCRIBE')
+print('\nDescribing dataset after processing:')
 print(df.describe())
-print(df.head())
 
 ###################################################
 # Elbow graphs with inertia and silhouette
 ###################################################
 
 # Analyze which n_cluster makes more sense with an elbow-curve approach
-ks = range(2, 11)
+max_clusters_to_try = 10
+ks = range(2, max_clusters_to_try+1)
 inertias = []
 silhouettes = []
 for k in ks:
@@ -102,15 +85,27 @@ axes[1].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(os.path.join(PLOTS_DIR, "elbow_curves.png"), dpi=300, bbox_inches="tight")
 
-# Silhouettes-Elbow curve shows which be the most reasonable number of clusters for this population.
-n_clusters = silhouettes.index(max(silhouettes)) + 2  # index 0 is 2 clusters, index 1 is 3 clusters, etc...
 
+# Silhouettes-Elbow curve shows which be the most reasonable number of clusters for this population.
+best_clusters_silhouettes = sorted(
+    [(i + 2, s) for i, s in enumerate(silhouettes)],
+    key=lambda t: t[1],          # sort by the score
+    reverse=True                 # highest first
+)
 
 ###################################################
 # Applying the K-Means Model
 ###################################################
 
-print(f"\n{n_clusters} seems like the most reasonable number of clusters according to the elbow-graph.")
+print(f"\nBased on the Silhouette elbow-graph, the most reasonable number of clusters seem to be:")
+for i in range(max_clusters_to_try//3):
+    clusters, silhouette = best_clusters_silhouettes[i][0], best_clusters_silhouettes[i][1]
+    print(f" - {clusters} clusters -> Silhouette {silhouette}")
+
+# Both 2 and 4 clusters seem to be reasonable
+
+print("\nProceeding with n_clusters = 4. \n")
+n_clusters = 4
 kmeans = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
 df["km_label"] = kmeans.fit_predict(df[feat_scaled])
 
@@ -163,8 +158,6 @@ sorted_labels  = labels[order]
 bar_colors = [cluster_colors[int(c)] for c in sorted_labels]
 
 plt.figure(figsize=(12, 4))
-cmap = cm.get_cmap("tab10", len(np.unique(labels)))
-
 plt.bar(range(len(sorted_scores)), sorted_scores,
         color=bar_colors, edgecolor=bar_colors, linewidth=0.3)
 plt.axhline(sil_avg, color="red", linestyle="--", linewidth=2,
