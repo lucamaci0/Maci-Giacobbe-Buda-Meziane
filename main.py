@@ -35,14 +35,17 @@ df.dropna(subset=['CustomerID'], inplace=True)
 
 df['InvoiceValue'] = df['Quantity'] * df['UnitPrice']
 
-df_spesa = df.groupby('CustomerID',as_index=False)['InvoiceValue'].sum()
-
 df = df.groupby('CustomerID').agg(
     CustomerLifetimeValue=('InvoiceValue', 'sum'),
     TotalItems=('Quantity', 'sum'), 
     AvgSpesa = ('InvoiceValue', 'mean'),
     # Frequency=('InvoiceDate', lambda x: (x.max()-x.min()).days / x.nunique() if x.nunique()>1 else 1)  # Frequenza acquisti
 ).reset_index()
+
+
+df_sorted = df.sort_values("CustomerLifetimeValue")
+print(df_sorted[['CustomerID', 'CustomerLifetimeValue', 'AvgSpesa']].head(30))
+print(df_sorted[['CustomerID', 'CustomerLifetimeValue', 'AvgSpesa']].tail(30))
 
 print(df.head())
 
@@ -163,7 +166,7 @@ plt.figure(figsize=(12, 4))
 cmap = cm.get_cmap("tab10", len(np.unique(labels)))
 
 plt.bar(range(len(sorted_scores)), sorted_scores,
-        color=bar_colors, edgecolor="black", linewidth=0.3)
+        color=bar_colors, edgecolor=bar_colors, linewidth=0.3)
 plt.axhline(sil_avg, color="red", linestyle="--", linewidth=2,
             label=f"Mean silhouette = {sil_avg:.2f}")
 plt.title("Silhouette score per point (colored by KMeans cluster)")
