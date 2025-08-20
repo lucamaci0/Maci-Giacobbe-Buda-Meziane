@@ -126,6 +126,21 @@ plt.xlabel(feat_for_clustering[0]); plt.ylabel(feat_for_clustering[1])
 plt.tight_layout(); 
 plt.savefig(os.path.join(PLOTS_DIR, "k-means_clustering.png"), dpi=300, bbox_inches="tight")
 
+# Plot of the clusters (IN SCALED UNITS)
+labels = df["km_label"].to_numpy()
+X = df[feat_scaled].to_numpy()  # original units for nicer axes
+centers = kmeans.cluster_centers_
+
+cluster_colors = {int(c): BASE_COLORS[int(c) % 10] for c in np.unique(labels)}
+plt.figure(figsize=(6,6))
+point_colors = [cluster_colors[int(c)] for c in labels]
+plt.scatter(X[:,0], X[:,1], c=point_colors, s=25)
+center_colors = [cluster_colors[i] for i in range(n_clusters)] 
+plt.scatter(centers[:,0], centers[:,1], c=center_colors, s=200, marker="X", edgecolor="k")
+plt.xlabel(feat_scaled[0]); plt.ylabel(feat_scaled[1])
+plt.tight_layout(); 
+plt.savefig(os.path.join(PLOTS_DIR, "SCALED_k-means_clustering.png"), dpi=300, bbox_inches="tight")
+
 
 ###################################################
 # Evaluating the Silhouette of the clustered points
