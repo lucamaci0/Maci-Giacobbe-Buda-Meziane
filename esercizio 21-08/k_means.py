@@ -41,12 +41,12 @@ print(df.describe())
 
 
 
-
+######################################################################
 
 # Scaling data to improve distance-based clustering
 feat_for_clustering = ['StudyTimeWeekly', 'GPA', 'Absences', 'Tutoring'] 
 feat_scaled = [f'SCALED_{feat}' for feat in feat_for_clustering] 
-feat_to_plot = ['StudyTimeWeekly', 'GPA', 'Tutoring']
+feat_to_plot = ['StudyTimeWeekly', 'Tutoring', 'Absences']
 
 
 scaler = StandardScaler()
@@ -55,6 +55,11 @@ df[feat_scaled] = df[feat_scaled].to_numpy()
 
 pca = PCA(n_components=0.90)
 X_pca = pca.fit_transform(df[feat_scaled])
+
+
+######################################################################
+
+
 
 
 
@@ -108,26 +113,39 @@ for ii in range(amount_of_cluster_plots):
 
   # Plot of the clusters
   labels = df["km_label"].to_numpy()
-  X = df[feat_for_clustering].to_numpy()  # original units for nicer axes
+  X_to_plot = df[feat_to_plot].to_numpy()  # original units for nicer axes
   centers = scaler.inverse_transform(kmeans.cluster_centers_)
-
   cluster_colors = {int(c): BASE_COLORS[int(c) % 10] for c in np.unique(labels)}
 
+#fix?
+#########################
+  centers_orig_df = pd.DataFrame(
+      scaler.inverse_transform(kmeans.cluster_centers_),
+      columns=feat_for_clustering
+  )
+  C_to_plot = centers_orig_df[feat_to_plot].to_numpy()
+#########################
 
   
-  if len(feat_for_clustering) >= 3:
+  if len(feat_to_plot) >= 3:
       # -------- 3D PLOT --------
     fig = plt.figure(figsize=(7,6))
     ax = fig.add_subplot(111, projection="3d")
 
     # points
     point_colors = [cluster_colors[int(c)] for c in labels]
-    ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=point_colors, s=20, depthshade=False)
+    ax.scatter(X_to_plot[:, 0], X_to_plot[:, 1], X_to_plot[:, 2], c=point_colors, s=20, depthshade=False)
 
     # centers
+
+    center_colors = [cluster_colors[i] for i in range(n_clusters)]
+    ax.scatter(C_to_plot[:, 0], C_to_plot[:, 1], C_to_plot[:, 2],             # <<< CHANGED (use C_to_plot, not raw centers[:, :3])
+               c=center_colors, s=200, marker="X", edgecolor="k")
+    """
     center_colors = [cluster_colors[i] for i in range(n_clusters)]
     ax.scatter(centers[:, 0], centers[:, 1], centers[:, 2],
                 c=center_colors, s=200, marker="X", edgecolor="k")
+    """
 
     ax.set_xlabel(feat_to_plot[0])
     ax.set_ylabel(feat_to_plot[1])
@@ -143,7 +161,7 @@ for ii in range(amount_of_cluster_plots):
       # -------- 2D PLOT (your original) --------
       plt.figure(figsize=(6,6))
       point_colors = [cluster_colors[int(c)] for c in labels]
-      plt.scatter(X[:,0], X[:,1], c=point_colors, s=25)
+      plt.scatter(X_to_plot[:,0], X_to_plot[:,1], c=point_colors, s=25)
       center_colors = [cluster_colors[i] for i in range(n_clusters)]
       plt.scatter(centers[:,0], centers[:,1], c=center_colors,
                   s=200, marker="X", edgecolor="k")
