@@ -6,6 +6,7 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 
 path = "Student_performance_data _.csv"
 df = pd.read_csv(path)
@@ -59,11 +60,20 @@ tree.fit(X_train, y_train)
 y_pred = tree.predict(X_test)
 score = cross_val_score(tree, x, y, cv=skf, scoring="roc_auc")
 
-print("Decision Tree:")
-print(classification_report(y_test, y_pred, digits=3))
-print("Score di CV:\nMedia:",score.mean(),"\nStd:", score.std())
-
 plt.figure(figsize=(18, 10))
 plot_tree(tree, feature_names=x.columns, class_names=["Basso","Alto"], filled=True)
 plt.title("Albero Decisionale")
 plt.show()
+
+print("Decision Tree:")
+print(classification_report(y_test, y_pred, digits=3))
+
+print("Score di CV:\nMedia:",score.mean(),"\nStd:", score.std())
+
+cm = confusion_matrix(y_test, y_pred)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=tree.classes_)
+disp.plot(cmap="Blues")
+plt.title("Confusion Matrix")
+plt.show()
+
+
