@@ -13,8 +13,10 @@
 
 ### 2. Supervised Learning
 
-* Train a classification model (e.g., Decision Tree or Random Forest) to predict whether a student will have “high” or “low” performance based on socio-demographic and school-related variables.
-* Evaluate the model using accuracy and confusion matrix.
+* Train a classification model (Decision Tree) to predict whether a student will have “high” or “low” performance based on socio-demographic and school-related variables. I considered all features (except StudentID and TargetClass) for training the model. 
+* Evaluate the model using a classification report and confusion matrix.
+* As an EXTRA: use of Cross-validation fold and its report. implementation of a Grid search for finding the best parameters.
+*
   **Contributor:** Beatrice Giacobbe
 
 ### 3. Unsupervised Learning
