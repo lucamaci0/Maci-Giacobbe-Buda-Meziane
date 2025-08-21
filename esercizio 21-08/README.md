@@ -24,12 +24,11 @@
 
 * Apply clustering algorithms to identify groups of students with similar characteristics:
 
-  * **K-Means:** Luca Maci
-  * **DBSCAN:** Cherki Meziane
+  * **K-Means:** Luca Maci (K-means)
+  * **DBSCAN:** Cherki Meziane (as an extra DBSCAN)
 * Compare clusters with supervised labels to identify consistent patterns.
 
 ### 4. Extra
 
-* Implement a SciPy workflow to allow statistical queries on the input data.
-
+* 3D plot for clustering, silhouette score and inertia
 
