@@ -25,6 +25,8 @@ from src.rag_or_search.crews.mathcrew.mathcrew import Mathcrew
 from src.rag_or_search.crews.teachercrew.teachercrew import Teachercrew
 from src.rag_or_search.crews.imagecrew.imagecrew import ImageCrew
 
+from src.rag_or_search.crews.teachercrew.teachercrew import Teachercrew
+from src.rag_or_search.crews.textspeechcrew.textspeechcrew import TTSCrew
 
 class RAGSearchState(BaseModel):
     """Shared state for the RAG-or-Search flow.
@@ -137,6 +139,7 @@ class RAGSearchFlow(Flow[RAGSearchState]):
             print("Math selected to answer your query")
             return "math"
 
+
     @listen("RAG")
     def query_RAG(self):
         """Execute the RAG pipeline branch.
@@ -154,6 +157,27 @@ class RAGSearchFlow(Flow[RAGSearchState]):
             }
         )
         
+        return self.state.result
+    
+
+    @listen("TTS")
+    def query_tts(self):
+        """
+        Execute the TTS (Text-to-Speech) branch.
+            
+        Returns: 
+
+        The result from the TTS crew kickoff, including audio file generation.
+        """
+        print(f"Converting text to speech: '{self.state.request[:50]}'")
+            
+        self.state.result = TTSCrew().crew().kickoff(
+            inputs={
+                "text": self.state.request
+            }
+        )
+        
+        print("\\Audio generation complete! Check the audio_outputs/ directory.")
         return self.state.result
 
     @listen(or_("web", query_RAG))
@@ -178,6 +202,8 @@ class RAGSearchFlow(Flow[RAGSearchState]):
             self.state.result = result
         
         return self.state.result
+
+    
         
     @listen("math")
     def query_math(self):

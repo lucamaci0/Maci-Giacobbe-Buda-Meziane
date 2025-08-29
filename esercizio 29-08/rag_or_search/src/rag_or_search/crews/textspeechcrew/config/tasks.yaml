@@ -1,0 +1,35 @@
+clean_text_task:
+  description: >
+    Analyze the input text and clean it for optimal TTS conversion. This includes:
+    - Removing or replacing special characters that might cause TTS issues
+    - Normalizing punctuation and spacing
+    - Expanding abbreviations and acronyms
+    - Ensuring proper sentence structure
+    - Adding pronunciation guides for difficult words if needed
+  expected_output: >
+    A cleaned, well-formatted version of the input text that is optimized for 
+    text-to-speech conversion, with explanations of any changes made.
+  agent: text_cleaner
+
+tts_task:
+  description: >
+    Convert the cleaned text into speech using the TTS tool. Configure appropriate
+    voice settings for natural-sounding output and generate the audio file.
+  expected_output: >
+    An audio file (WAV or MP3) containing the spoken version of the text, along with
+    details about the TTS settings used and the file location.
+  agent: tts_converter
+  tools: [tts_tool]
+
+quality_check_task:
+  description: >
+    Review the generated audio file for quality issues including:
+    - Clarity and intelligibility
+    - Proper pronunciation of words
+    - Appropriate pacing and rhythm
+    - Audio quality and lack of artifacts
+    - Overall naturalness of the speech
+  expected_output: >
+    A quality assessment report detailing the audio's strengths and any areas
+    for improvement, with specific recommendations if issues are found.
+  agent: quality_checker
