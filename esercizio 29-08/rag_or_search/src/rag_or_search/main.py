@@ -23,6 +23,7 @@ from src.rag_or_search.crews.searchcrew.searchcrew import SearchCrew
 from src.rag_or_search.crews.ragcrew.ragcrew import Ragcrew
 from src.rag_or_search.crews.mathcrew.mathcrew import Mathcrew
 from src.rag_or_search.crews.teachercrew.teachercrew import Teachercrew
+from src.rag_or_search.crews.imagecrew.imagecrew import ImageCrew
 
 
 class RAGSearchState(BaseModel):
@@ -205,6 +206,17 @@ class RAGSearchFlow(Flow[RAGSearchState]):
             inputs={
                 "request": self.state.request,
                 "info": self.state.result.raw
+            }
+        )
+        
+    @listen(explain)
+    def generate_image(self):
+        """Generate an image based on the user request."""
+        
+        _ = ImageCrew().crew().kickoff(
+            inputs={
+                "topic": self.state.request,
+                "text": self.state.result.raw
             }
         )
             

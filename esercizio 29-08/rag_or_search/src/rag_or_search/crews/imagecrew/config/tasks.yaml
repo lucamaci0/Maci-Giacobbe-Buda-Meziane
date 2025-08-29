@@ -1,0 +1,27 @@
+scene_extraction_task:
+  description: >
+    Analyze the provided text about {topic} and identify a scene that can be clearly depicted in an image.
+    Ensure the scene is illustrative and easy to describe for image creation.
+    Text: {text}
+  expected_output: >
+    A concise description of a single scene suitable for image generation, highlighting key visual elements.
+  agent: scene_extractor
+
+image_prompt_task:
+  description: >
+    Craft a detailed, realistic prompt for generating an image based on the scene extracted by the previous agent.
+    The prompt should be clear, visually descriptive, and suitable for use with image generation tools.
+  expected_output: >
+    A well-structured image prompt that accurately conveys the scene and its visual details for image generation.
+  agent: image_prompt_generator
+
+image_creation_task:
+  description: >
+    Use the provided image prompt and tools to generate a realistic image that explains {topic}.
+    Ensure the image is engaging and accessible for a wide audience.
+  expected_output: >
+    A generated image file (or link) along with a brief description of how the image represents {topic}.
+  context: 
+    - image_prompt_task: The detailed prompt created by the image_prompt_task.
+  output_file: outputs/image.png
+  agent: image_creator
