@@ -1,0 +1,17 @@
+outline_task:
+  description: >
+    Analyze the provided information answering the user query: '{request}' and generate a clear, logical outline.
+    Each point in the outline should be a paragraph title, forming a skeleton for further writing.
+    Ensure the outline covers all key aspects in a logical order.
+  expected_output: >
+    A numbered list of paragraph titles that together form a comprehensive outline for explaining the topic.
+  agent: outline_generator
+
+writing_task:
+  description: >
+    Using the provided outline and sources, write a simple, clear, and complete explanation of the topic.
+    Ensure the writing is accessible, thorough, and covers all points in the outline.
+  expected_output: >
+    A well-written document explaining the topic, with each section corresponding to a point in the outline.
+    Formatted as markdown without '```'.
+  agent: document_writer

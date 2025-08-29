@@ -1,0 +1,16 @@
+web_search:
+  description: >
+    Search the web for information on the following user request: '{request}' using the web search tool and return relevant results.
+    Structure your search query by using appropriate keywords or phrases to maximize the relevance of the results. 
+    Your goal is to provide a list of relevant search results.
+  expected_output: >
+    A list of relevant search results, including web site and a summary of the page.
+  agent: web_search_agent
+
+summarize_results:
+  description: >
+    Summarize the findings and results from the web search agent into concise insights.
+  expected_output: >
+    A clear, digestible summary highlighting key points and actionable recommendations.
+  agent: summarizer
+
