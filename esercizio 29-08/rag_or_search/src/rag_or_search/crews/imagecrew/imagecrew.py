@@ -1,11 +1,11 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai.agents.agent_builder.base_agent import BaseAgents
+from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
-
+from src.rag_or_search.tools.image_generation_tool import ImageGenerationTool
 
 @CrewBase
-class Imagecrew():
+class ImageCrew():
     """Imagecrew crew"""
 
     agents: List[BaseAgent]
@@ -30,6 +30,7 @@ class Imagecrew():
         return Agent(
             config=self.agents_config['image_creator'], # type: ignore[index]
             verbose=True,
+            tools=[ImageGenerationTool()]
         )
 
     @task
@@ -47,8 +48,8 @@ class Imagecrew():
     @task
     def image_creation_task(self) -> Task:
         return Task(
-            config=self.tasks_config['image_creation_task'], # type: ignore[index]
-            output_file='outputs/image.png'
+            config=self.tasks_config['image_creation_task'] # type: ignore[index]
+
         )
     @crew
     def crew(self) -> Crew:

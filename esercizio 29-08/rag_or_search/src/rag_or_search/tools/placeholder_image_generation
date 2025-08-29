@@ -10,20 +10,20 @@ from openai import AzureOpenAI, BaseModel
 load_dotenv()
 
 
-description = "La presa della bastiglia durante la rivoluzione francese, resa in versione non-violenta, per un libro di storia per bambini"
+prompt = "Create a scientifically accurate depiction of a mitochondrion within a cell. Show a highly detailed close-up of a single mitochondrion featuring a double-membrane structure with an outer membrane and an intricately folded inner membrane forming cristae. The cristae should appear as a three-dimensional maze, symbolizing the internal matrix. Use glowing vibrant shades of blue and green inside the organelle to emphasize energetic processes. Include small glowing ATP molecule icons actively emerging around the cristae to highlight the mitochondrion's role as the 'powerhouse of the cell.' For the background, depict the cytoplasm in a semi-transparent style with faint outlines of nearby organelles like endoplasmic reticulum and ribosomes, adding context without overcrowding. Maintain a semi-realistic color palette with a slight scientific diagram aesthetic, using glowing effects and highlights to make the mitochondrion and its processes stand out. The ambiance should feel high-tech and biologically dynamic, symbolizing intricate life processes on a cellular level."
 print(os.getenv("DEPLOYMENT_IMAGE_GENERATION"))
 # load credentials
 client = AzureOpenAI(
-    api_key=os.getenv("AZURE_OPENAI_API_KEY") or "",
-    api_version=os.getenv("AZURE_OPENAI_API_VERSION") or "",
-    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT") or "",
+    api_key=os.getenv("AZURE_API_KEY") or "",
+    api_version=os.getenv("AZURE_DALLE_API_VERSION") or "",
+    azure_endpoint=os.getenv("AZURE_API_BASE") or "",
 )
 
 # generate an image
 result = client.images.generate(
     model=os.getenv("DEPLOYMENT_IMAGE_GENERATION"),
     moderation="auto",
-    prompt=description,
+    prompt=prompt,
     size="1024x1024",   # options: 256x256, 512x512, 1024x1024
     response_format="b64_json",
 )

@@ -5,6 +5,8 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from src.rag_or_search.tools.search import SearchTool
+from crewai_tools import SerperDevTool
+
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
@@ -25,7 +27,7 @@ class SearchCrew():
     @agent
     def web_search_agent(self) -> Agent:
         """Agent that queries DuckDuckGo for relevant pages."""
-        search_tool = SearchTool()
+        search_tool = SerperDevTool()
         
         return Agent(
             config=self.agents_config['web_search_agent'], # type: ignore[index]

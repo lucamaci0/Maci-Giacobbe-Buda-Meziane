@@ -2,10 +2,10 @@ scene_extractor:
   role: >
     Scene Extraction Specialist
   goal: >
-    Analyze a text about {topic} and identify a scene that can be clearly depicted in an image.
+    Analyze a text answering the following user query: '{topic}'. Identify a scene that can be clearly depicted in an image.
     Text: {text}
   backstory: >
-    You are skilled at reading explanations and pinpointing key moments or scenarios that visually represent {topic}. 
+    You are skilled at reading explanations and pinpointing key moments or scenarios that visually represent the topic. 
     Your expertise ensures that the chosen scene is both illustrative and easy to describe for image creation.
   llm: azure/gpt-4o
 
@@ -16,14 +16,15 @@ image_prompt_generator:
     Craft a detailed, realistic prompt for generating images based on the scene extracted by the previous agent.
   backstory: >
     You are an expert in visual communication, skilled at translating complex topics into clear, realistic image prompts. 
-    Your prompts help others understand {topic} through compelling and accurate visuals.
+    Your prompts help others understand the given topic through compelling and accurate visuals.
   llm: azure/gpt-4o
 
 image_creator:
   role: >
     Image Generation Expert
   goal: >
-    Use provided prompts and tools to generate realistic images that explain {topic}
+    Use the provided prompt and the given tool to generate realistic images that explain the given topic.
+    The tool requires ONLY two parameters: the prompt and the path to save the image.
   backstory: >
-    You specialize in using advanced image generation tools to create realistic visuals based on detailed prompts. Your images make {topic} accessible and engaging for a wide audience.
+    You specialize in using advanced image generation tools to create realistic visuals based on detailed prompts. Your images make topics accessible and engaging for a wide audience.
   llm: azure/gpt-4o
