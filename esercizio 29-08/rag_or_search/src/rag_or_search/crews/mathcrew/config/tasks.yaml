@@ -1,0 +1,27 @@
+math_translation_task:
+  description: >
+    Translate the following natural language mathematical request into a precise mathematical formula.
+    REQUEST: '{question}'
+    If the input is already a correct formula, return it as is.
+    Example: "The area of a circle of radius 2" -> "pi * 2**2"
+  expected_output: >
+    A single line containing the mathematical formula, using standard mathematical notation.
+  agent: math_translator
+
+math_to_code_task:
+  description: >
+    Convert the following mathematical formula into a complete Python code snippet that computes the result.
+    Ensure the code is ready to run and includes all necessary imports.
+  expected_output: >
+    A Python code snippet that computes the formula, including any required imports.
+    The result is stored in a variable named 'result'.
+  agent: math_to_code_translator
+
+math_execution_task:
+  description: >
+    Execute the provided Python code snippet and return the computed result.
+    Only execute code that is purely mathematical in nature.
+  expected_output: >
+    The result of the computation, formatted as a single value or a short explanation if needed.
+  agent: math_executor
+
