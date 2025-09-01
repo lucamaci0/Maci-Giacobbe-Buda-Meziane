@@ -22,6 +22,7 @@ from src.rag_or_search.crews.ragcrew.ragcrew import Ragcrew
 from src.rag_or_search.crews.mathcrew.mathcrew import Mathcrew
 from src.rag_or_search.crews.teachercrew.teachercrew import Teachercrew
 from src.rag_or_search.crews.imagecrew.imagecrew import ImageCrew
+from src.rag_or_search.crews.aiactcrew.aiactcrew import Aiactcrew
 
 os.environ["CREWAI_TELEMETRY_DISABLED"] = "1"
 
@@ -41,6 +42,7 @@ class RAGSearchState(BaseModel):
     request: str = ""
     tool: str = ""  # "RAG" or "web"
     result: str = ""
+    input: int = 0
 
 
 class RAGSearchFlow(Flow[RAGSearchState]):
@@ -54,6 +56,28 @@ class RAGSearchFlow(Flow[RAGSearchState]):
     """
 
     @start()
+    def select_option(self):
+
+        valid_option = False
+        while not valid_option:
+            self.state.input = int(input("Select an option: 1. Generate AI act report, 2. Run RAG-or-Search flow"))
+            if self.state.input == 1:
+                valid_option = True
+            elif self.state.input == 2:
+                valid_option = True
+            else:
+                print("Invalid option")
+        return self.state.input
+                
+    @router(select_option)
+    def route(self):
+        
+        if self.state.input == 1:
+            return "ai_act"
+        elif self.state.input == 2:
+            return "rag_or_search"
+
+    @listen("rag_or_search")
     def get_user_request(self):
         """Prompt the user, validate for safety, and classify the request.
 
@@ -80,6 +104,7 @@ class RAGSearchFlow(Flow[RAGSearchState]):
         >>> print(flow.state.tool)
         web
         """
+
         llm = LLM(model="azure/gpt-4o")
 
         while True:
@@ -98,7 +123,7 @@ class RAGSearchFlow(Flow[RAGSearchState]):
                 {
                     "role": "user",
                     "content": f"Is the following topic safe or unsafe? "
-                               f"Topic: '{self.state.request}'"
+                            f"Topic: '{self.state.request}'"
                 }
             ]
 
@@ -136,6 +161,20 @@ class RAGSearchFlow(Flow[RAGSearchState]):
         print("*"*10 + self.state.tool + "*"*10)
 
         return self.state.request
+    
+    @listen("ai_act")
+    def generate_ai_act(self):
+        """Generate an AI Act compliance report for the flow."""
+        print("SONO QUI DENTRO GENERATE!!!")
+        AI_Act_Crew = Aiactcrew()
+        report = AI_Act_Crew.crew().kickoff(
+            inputs={
+                'url': 'https://aloosley.github.io/techops/template-application-documentation/'
+            }
+        )
+        print(report)
+        
+        return report
 
     @router(get_user_request)
     def select_tool(self):
@@ -353,3 +392,4 @@ def plot():
 
 if __name__ == "__main__":
     kickoff()
+    # generate_ai_act()

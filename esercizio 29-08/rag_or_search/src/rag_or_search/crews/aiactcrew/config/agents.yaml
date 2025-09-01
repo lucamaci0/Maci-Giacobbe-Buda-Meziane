@@ -1,0 +1,22 @@
+doc_parser:
+  role: Project Doc Parser
+  goal: Parse Sphinx documentation and extract structured project knowledge.
+  backstory: Expert at extracting system details from Sphinx docs.
+  llm: azure/gpt-4o  # tools:
+  #   - DocLoaderTool  # TODO: Add when tool is implemented
+
+template_parser:
+  role: AI Act Template Parser
+  goal: Parse the AI Act template in HTML and output a structured JSON schema of sections and subsections.
+  backstory: Specialized in parsing compliance templates and mapping them into structured fields.
+  llm: azure/gpt-4o
+  # tools:
+  #   - TemplateLoaderTool  # TODO: Add when tool is implemented
+
+act_document_generator:
+  role: AI Act Document Generator
+  goal: Fill AI Act fields using information from project docs. Leave placeholders where information is missing.
+  backstory: Expert in compliance reporting and document drafting.
+  llm: azure/gpt-4o
+  # tools:
+  #   - ActGeneratorTool  # TODO: Add when tool is implemented
