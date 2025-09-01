@@ -23,7 +23,23 @@ class Teachercrew():
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def outline_generator(self) -> Agent:
-        """Agent that creates a structured outline for the topic."""
+        """Agent that creates a structured outline for the topic.
+
+        Creates an outline generation agent configured to analyze content
+        and generate structured outlines for educational purposes.
+
+        Returns
+        -------
+        Agent
+            A configured CrewAI agent specialized in outline generation.
+
+        Examples
+        --------
+        >>> crew = Teachercrew()
+        >>> agent = crew.outline_generator()
+        >>> print(type(agent))
+        <class 'crewai.agent.Agent'>
+        """
         return Agent(
             config=self.agents_config['outline_generator'], # type: ignore[index]
             verbose=True
@@ -31,7 +47,23 @@ class Teachercrew():
 
     @agent
     def document_writer(self) -> Agent:
-        """Agent that drafts an explanatory document from the outline."""
+        """Agent that drafts an explanatory document from the outline.
+
+        Creates a document writing agent configured to transform structured
+        outlines into comprehensive explanatory documents.
+
+        Returns
+        -------
+        Agent
+            A configured CrewAI agent specialized in document writing.
+
+        Examples
+        --------
+        >>> crew = Teachercrew()
+        >>> agent = crew.document_writer()
+        >>> print(type(agent))
+        <class 'crewai.agent.Agent'>
+        """
         return Agent(
             config=self.agents_config['document_writer'], # type: ignore[index]
             verbose=True
@@ -42,14 +74,46 @@ class Teachercrew():
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
     def outline_task(self) -> Task:
-        """Task that produces an outline for the requested topic."""
+        """Task that produces an outline for the requested topic.
+
+        Creates an outline generation task configured to analyze content
+        and generate structured outlines for educational materials.
+
+        Returns
+        -------
+        Task
+            A configured CrewAI task for outline generation operations.
+
+        Examples
+        --------
+        >>> crew = Teachercrew()
+        >>> task = crew.outline_task()
+        >>> print(type(task))
+        <class 'crewai.task.Task'>
+        """
         return Task(
             config=self.tasks_config['outline_task'], # type: ignore[index]
         )
 
     @task
     def writing_task(self) -> Task:
-        """Task that writes an explanatory document based on the outline."""
+        """Task that writes an explanatory document based on the outline.
+
+        Creates a document writing task configured to transform structured
+        outlines into comprehensive explanatory documents and save them to a report file.
+
+        Returns
+        -------
+        Task
+            A configured CrewAI task for document writing operations.
+
+        Examples
+        --------
+        >>> crew = Teachercrew()
+        >>> task = crew.writing_task()
+        >>> print(type(task))
+        <class 'crewai.task.Task'>
+        """
         return Task(
             config=self.tasks_config['writing_task'], # type: ignore[index]
             output_file='report.md'
@@ -57,7 +121,23 @@ class Teachercrew():
 
     @crew
     def crew(self) -> Crew:
-        """Create and return the teacher-oriented crew."""
+        """Create and return the teacher-oriented crew.
+
+        Assembles and configures a CrewAI crew with outline generation and
+        document writing agents and tasks for educational content creation.
+
+        Returns
+        -------
+        Crew
+            A configured CrewAI crew ready for educational content generation tasks.
+
+        Examples
+        --------
+        >>> crew_instance = Teachercrew()
+        >>> crew = crew_instance.crew()
+        >>> print(type(crew))
+        <class 'crewai.crew.Crew'>
+        """
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

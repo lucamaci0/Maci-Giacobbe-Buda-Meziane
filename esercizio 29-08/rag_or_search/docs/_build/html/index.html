@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RAG, search and math agent documentation &#8212; RAG, search and math agent  documentation</title>
+    <title>RAG, search and solve math documentation &#8212; RAG, search and solve math  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
@@ -31,16 +31,699 @@
 
           <div class="body" role="main">
             
-  <section id="rag-search-and-math-agent-documentation">
-<h1>RAG, search and math agent documentation<a class="headerlink" href="#rag-search-and-math-agent-documentation" title="Link to this heading">¶</a></h1>
+  <section id="rag-search-and-solve-math-documentation">
+<h1>RAG, search and solve math documentation<a class="headerlink" href="#rag-search-and-solve-math-documentation" title="Link to this heading">¶</a></h1>
 <p>Add your content using <code class="docutils literal notranslate"><span class="pre">reStructuredText</span></code> syntax. See the
 <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html">reStructuredText</a>
 documentation for details.</p>
 <div class="toctree-wrapper compound">
 </div>
-<section id="api-reference">
-<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h2>
+<p id="module-src.rag_or_search.tools.rag_utils">Utility functions for building and querying a simple RAG pipeline.</p>
+<p>This module centralizes helpers to:</p>
+<ul class="simple">
+<li><p>Initialize embeddings and a chat model (Azure OpenAI compatible)</p></li>
+<li><p>Load or simulate documents</p></li>
+<li><p>Split documents into chunks</p></li>
+<li><p>Build or load a FAISS vector store</p></li>
+<li><p>Configure a retriever and format contexts for prompts</p></li>
+<li><p>Execute basic RAG retrieval flows</p></li>
+</ul>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>These utilities expect Azure OpenAI environment variables to be configured
+(<code class="docutils literal notranslate"><span class="pre">AZURE_API_BASE</span></code>, <code class="docutils literal notranslate"><span class="pre">AZURE_API_KEY</span></code>, <code class="docutils literal notranslate"><span class="pre">AZURE_API_VERSION</span></code>, and an embedding
+deployment). When running locally, secrets may be prompted via <code class="docutils literal notranslate"><span class="pre">getpass</span></code>.</p>
 </section>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.Settings">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">Settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">persist_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'faiss_index_example'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_overlap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'mmr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fetch_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mmr_lambda</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmstudio_model_env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'MODEL'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.Settings" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration values for RAG utilities.</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>persist_dir<span class="classifier">str</span></dt><dd><p>Directory where the FAISS index is stored.</p>
+</dd>
+<dt>chunk_size<span class="classifier">int</span></dt><dd><p>Maximum characters per chunk during splitting.</p>
+</dd>
+<dt>chunk_overlap<span class="classifier">int</span></dt><dd><p>Overlap between adjacent chunks to preserve context.</p>
+</dd>
+<dt>search_type<span class="classifier">str</span></dt><dd><p>Retrieval mode, <code class="docutils literal notranslate"><span class="pre">&quot;mmr&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;similarity&quot;</span></code>.</p>
+</dd>
+<dt>k<span class="classifier">int</span></dt><dd><p>Number of final retrieved documents.</p>
+</dd>
+<dt>fetch_k<span class="classifier">int</span></dt><dd><p>Initial candidate pool size for MMR.</p>
+</dd>
+<dt>mmr_lambda<span class="classifier">float</span></dt><dd><p>Trade-off for MMR, 0=max diversity, 1=max relevance.</p>
+</dd>
+<dt>lmstudio_model_env<span class="classifier">str</span></dt><dd><p>Environment variable name holding the Azure OpenAI deployment name.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.Settings.chunk_overlap">
+<span class="sig-name descname"><span class="pre">chunk_overlap</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.Settings.chunk_overlap" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.Settings.chunk_size">
+<span class="sig-name descname"><span class="pre">chunk_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.Settings.chunk_size" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.Settings.fetch_k">
+<span class="sig-name descname"><span class="pre">fetch_k</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.Settings.fetch_k" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.Settings.k">
+<span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.Settings.k" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.Settings.lmstudio_model_env">
+<span class="sig-name descname"><span class="pre">lmstudio_model_env</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MODEL'</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.Settings.lmstudio_model_env" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.Settings.mmr_lambda">
+<span class="sig-name descname"><span class="pre">mmr_lambda</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.Settings.mmr_lambda" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.Settings.persist_dir">
+<span class="sig-name descname"><span class="pre">persist_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'faiss_index_example'</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.Settings.persist_dir" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.Settings.search_type">
+<span class="sig-name descname"><span class="pre">search_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mmr'</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.Settings.search_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.build_faiss_vectorstore">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">build_faiss_vectorstore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Document</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embeddings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FAISS</span></span></span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.build_faiss_vectorstore" title="Link to this definition">¶</a></dt>
+<dd><p>Build and persist a FAISS index from document chunks.</p>
+<p>Creates a FAISS vector store from document chunks and saves it to disk
+for future retrieval operations.</p>
+<section id="args">
+<h2>Args<a class="headerlink" href="#args" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>chunks<span class="classifier">list of Document</span></dt><dd><p>Document chunks to index in the vector store.</p>
+</dd>
+<dt>embeddings<span class="classifier">Any</span></dt><dd><p>Embeddings model used to create vector representations.</p>
+</dd>
+<dt>persist_dir<span class="classifier">str</span></dt><dd><p>Directory path where the FAISS index will be saved.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>FAISS</dt><dd><p>The created and persisted FAISS vector store instance.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">docs</span> <span class="o">=</span> <span class="n">simulate_corpus</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embeddings</span> <span class="o">=</span> <span class="n">get_embeddings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vs</span> <span class="o">=</span> <span class="n">build_faiss_vectorstore</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">embeddings</span><span class="p">,</span> <span class="s2">&quot;test_index&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">vs</span><span class="p">))</span>
+<span class="go">&lt;class &#39;langchain_community.vectorstores.faiss.FAISS&#39;&gt;</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.format_docs_for_prompt">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">format_docs_for_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Document</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.format_docs_for_prompt" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare a prompt context string with [source:…] citations.</p>
+<p>Formats a list of Document objects into a single string with source
+citations for use in prompt templates.</p>
+<section id="id1">
+<h2>Args<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>docs<span class="classifier">list of Document</span></dt><dd><p>List of Document objects to format.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>str</dt><dd><p>Formatted string with each document’s content prefixed by its source.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h2>Examples<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">docs</span> <span class="o">=</span> <span class="n">simulate_corpus</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">formatted</span> <span class="o">=</span> <span class="n">format_docs_for_prompt</span><span class="p">(</span><span class="n">docs</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[source:&#39;</span> <span class="ow">in</span> <span class="n">formatted</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;LangChain&#39;</span> <span class="ow">in</span> <span class="n">formatted</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.get_contexts_for_question">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">get_contexts_for_question</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">retriever</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">question</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.get_contexts_for_question" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contents of the top-k retrieved chunks.</p>
+<p>Retrieves the top-k most relevant document chunks for a given question
+and returns them as a mapping from source to content.</p>
+<section id="id4">
+<h2>Args<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>retriever<span class="classifier">Any</span></dt><dd><p>The retriever to query for relevant documents.</p>
+</dd>
+<dt>question<span class="classifier">str</span></dt><dd><p>Query text to search for.</p>
+</dd>
+<dt>k<span class="classifier">int</span></dt><dd><p>Number of contexts to retrieve and return.</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h2>Returns<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>dict</dt><dd><p>Dictionary mapping source names to page content strings.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h2>Examples<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">retriever</span> <span class="o">=</span> <span class="n">make_retriever</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">contexts</span> <span class="o">=</span> <span class="n">get_contexts_for_question</span><span class="p">(</span><span class="n">retriever</span><span class="p">,</span> <span class="s2">&quot;What is FAISS?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">contexts</span><span class="p">))</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">contexts</span><span class="p">))</span>
+<span class="go">&lt;class &#39;dict&#39;&gt;</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.get_embeddings">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">get_embeddings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.get_embeddings" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize Azure OpenAI embeddings client.</p>
+<p>Creates and configures an Azure OpenAI embeddings client using environment
+variables. Prompts the user for an API key if not already set.</p>
+<section id="id7">
+<h2>Returns<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>AzureOpenAIEmbeddings</dt><dd><p>Configured embeddings instance ready for use.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If required environment variables are not set.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h2>Examples<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">embeddings</span> <span class="o">=</span> <span class="n">get_embeddings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">embeddings</span><span class="p">))</span>
+<span class="go">&lt;class &#39;langchain_openai.embeddings.AzureOpenAIEmbeddings&#39;&gt;</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.get_llm_from_lmstudio">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">get_llm_from_lmstudio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.rag_or_search.tools.rag_utils.Settings" title="src.rag_or_search.tools.rag_utils.Settings"><span class="pre">Settings</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.get_llm_from_lmstudio" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize a chat model pointing to Azure OpenAI.</p>
+<p>Creates a chat model instance configured to use Azure OpenAI services
+based on the provided settings and environment variables.</p>
+<section id="id9">
+<h2>Args<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>settings<span class="classifier">Settings</span></dt><dd><p>The settings object providing the model deployment environment variable name.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h2>Returns<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>Any</dt><dd><p>A chat model instance compatible with LangChain interfaces.</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h2>Raises<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If required Azure OpenAI environment variables are not set.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h2>Examples<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">llm</span> <span class="o">=</span> <span class="n">get_llm_from_lmstudio</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">llm</span><span class="p">))</span>
+<span class="go">&lt;class &#39;langchain.chat_models.base.ChatOpenAI&#39;&gt;</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.load_documents">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">load_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.load_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Load documents from disk by format.</p>
+<p>Loads documents from a file using the specified format. Currently supports
+Markdown files which are split by “—” separators.</p>
+<section id="id13">
+<h2>Args<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>file_format<span class="classifier">str</span></dt><dd><p>Short format specifier, currently only “md” supported.</p>
+</dd>
+<dt>file_path<span class="classifier">str</span></dt><dd><p>Path to the file to load.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h2>Returns<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>list of Document</dt><dd><p>List of parsed Document objects with metadata.</p>
+</dd>
+</dl>
+</section>
+<section id="id15">
+<h2>Raises<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If an unsupported format is requested.</p>
+</dd>
+<dt>FileNotFoundError</dt><dd><p>If the specified file path does not exist.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h2>Examples<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">docs</span> <span class="o">=</span> <span class="n">load_documents</span><span class="p">(</span><span class="s2">&quot;md&quot;</span><span class="p">,</span> <span class="s2">&quot;example.md&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">docs</span><span class="p">))</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">docs</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="go">&lt;class &#39;langchain.schema.document.Document&#39;&gt;</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.load_md_documents">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">load_md_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Document</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.load_md_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Read a Markdown file into LangChain Document objects.</p>
+<p>Parses a Markdown file and splits it into Document objects based on
+“—” separators, with each section becoming a separate document.</p>
+<section id="id17">
+<h2>Args<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>file_path<span class="classifier">str</span></dt><dd><p>Path to the Markdown file to read.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h2>Returns<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>list of Document</dt><dd><p>List of Document objects, one per section split on “—“.</p>
+</dd>
+</dl>
+</section>
+<section id="id19">
+<h2>Raises<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>FileNotFoundError</dt><dd><p>If the specified file path does not exist.</p>
+</dd>
+</dl>
+</section>
+<section id="id20">
+<h2>Examples<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">docs</span> <span class="o">=</span> <span class="n">load_md_documents</span><span class="p">(</span><span class="s2">&quot;example.md&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">docs</span><span class="p">))</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">docs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">])</span>
+<span class="go">example.md</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.load_or_build_vectorstore">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">load_or_build_vectorstore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.rag_or_search.tools.rag_utils.Settings" title="src.rag_or_search.tools.rag_utils.Settings"><span class="pre">Settings</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">embeddings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Document</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FAISS</span></span></span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.load_or_build_vectorstore" title="Link to this definition">¶</a></dt>
+<dd><p>Load a persisted FAISS index or build one from documents.</p>
+<p>Attempts to load an existing FAISS index from disk. If no index exists,
+creates a new one from the provided documents and saves it for future use.</p>
+<section id="id21">
+<h2>Args<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>settings<span class="classifier">Settings</span></dt><dd><p>Configuration including persist_dir for index storage.</p>
+</dd>
+<dt>embeddings<span class="classifier">Any</span></dt><dd><p>Embeddings model for creating vector representations.</p>
+</dd>
+<dt>docs<span class="classifier">list of Document</span></dt><dd><p>Documents to use for building the index if it doesn’t exist.</p>
+</dd>
+</dl>
+</section>
+<section id="id22">
+<h2>Returns<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>FAISS</dt><dd><p>Either the loaded existing vector store or a newly built one.</p>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h2>Examples<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(</span><span class="n">persist_dir</span><span class="o">=</span><span class="s2">&quot;test_index&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embeddings</span> <span class="o">=</span> <span class="n">get_embeddings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">docs</span> <span class="o">=</span> <span class="n">simulate_corpus</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vs</span> <span class="o">=</span> <span class="n">load_or_build_vectorstore</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">embeddings</span><span class="p">,</span> <span class="n">docs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">vs</span><span class="p">))</span>
+<span class="go">&lt;class &#39;langchain_community.vectorstores.faiss.FAISS&#39;&gt;</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.make_retriever">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">make_retriever</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector_store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FAISS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.rag_or_search.tools.rag_utils.Settings" title="src.rag_or_search.tools.rag_utils.Settings"><span class="pre">Settings</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.make_retriever" title="Link to this definition">¶</a></dt>
+<dd><p>Configure a retriever, optionally using MMR for diversity.</p>
+<p>Creates a retriever from a FAISS vector store with configurable search
+parameters. Supports both similarity search and MMR (Maximal Marginal Relevance)
+for diversity in retrieved results.</p>
+<section id="id24">
+<h2>Args<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>vector_store<span class="classifier">FAISS</span></dt><dd><p>The FAISS vector store to wrap as a retriever.</p>
+</dd>
+<dt>settings<span class="classifier">Settings</span></dt><dd><p>Retrieval configuration including search type, k, fetch_k, and mmr_lambda.</p>
+</dd>
+</dl>
+</section>
+<section id="id25">
+<h2>Returns<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>Any</dt><dd><p>A retriever object compatible with LangChain interfaces.</p>
+</dd>
+</dl>
+</section>
+<section id="id26">
+<h2>Examples<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vs</span> <span class="o">=</span> <span class="n">FAISS</span><span class="o">.</span><span class="n">from_documents</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">embeddings</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(</span><span class="n">search_type</span><span class="o">=</span><span class="s2">&quot;mmr&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">retriever</span> <span class="o">=</span> <span class="n">make_retriever</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">retriever</span><span class="p">))</span>
+<span class="go">&lt;class &#39;langchain_community.vectorstores.base.VectorStoreRetriever&#39;&gt;</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.rag_answer">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">rag_answer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">question</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.rag_answer" title="Link to this definition">¶</a></dt>
+<dd><p>Execute a RAG chain for a single question.</p>
+<p>Runs a RAG (Retrieval-Augmented Generation) chain to answer a question
+using retrieved context and a language model.</p>
+<section id="id27">
+<h2>Args<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>question<span class="classifier">str</span></dt><dd><p>The user query to answer.</p>
+</dd>
+<dt>chain<span class="classifier">Any</span></dt><dd><p>A LangChain chain or runnable that supports the invoke method.</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h2>Returns<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>str</dt><dd><p>The generated answer text from the RAG chain.</p>
+</dd>
+</dl>
+</section>
+<section id="id29">
+<h2>Examples<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Assuming chain is a properly configured RAG chain</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">answer</span> <span class="o">=</span> <span class="n">rag_answer</span><span class="p">(</span><span class="s2">&quot;What is LangChain?&quot;</span><span class="p">,</span> <span class="n">chain</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">answer</span><span class="p">))</span>
+<span class="go">&lt;class &#39;str&#39;&gt;</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.rag_search">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">rag_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">question</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.rag_search" title="Link to this definition">¶</a></dt>
+<dd><p>Perform a simple RAG retrieval flow and return contexts.</p>
+<p>Executes a complete RAG retrieval pipeline including document loading,
+vector store creation/loading, and context retrieval for a given question.</p>
+<section id="id30">
+<h2>Args<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>question<span class="classifier">str</span></dt><dd><p>The user query to search for.</p>
+</dd>
+<dt>k<span class="classifier">int</span></dt><dd><p>Number of contexts to retrieve and return.</p>
+</dd>
+</dl>
+</section>
+<section id="id31">
+<h2>Returns<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>dict</dt><dd><p>Dictionary mapping source names to page content of retrieved chunks.</p>
+</dd>
+</dl>
+</section>
+<section id="id32">
+<h2>Examples<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">contexts</span> <span class="o">=</span> <span class="n">rag_search</span><span class="p">(</span><span class="s2">&quot;What is LangChain?&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">contexts</span><span class="p">))</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">contexts</span><span class="p">))</span>
+<span class="go">&lt;class &#39;dict&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;LangChain&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">contexts</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.simulate_corpus">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">simulate_corpus</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Document</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.simulate_corpus" title="Link to this definition">¶</a></dt>
+<dd><p>Create a small English corpus with metadata and source for citations.</p>
+<p>Generates a predefined set of Document objects containing information about
+LangChain, FAISS, sentence transformers, RAG pipelines, and MMR retrieval.
+Each document includes metadata with an ID and source for citation purposes.</p>
+<section id="id33">
+<h2>Returns<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>list of Document</dt><dd><p>List of 5 Document objects with predefined content about AI/ML topics.</p>
+</dd>
+</dl>
+</section>
+<section id="id34">
+<h2>Examples<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">docs</span> <span class="o">=</span> <span class="n">simulate_corpus</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">docs</span><span class="p">))</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">docs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+<span class="go">doc1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;LangChain&#39;</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag_utils.split_documents">
+<span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag_utils.</span></span><span class="sig-name descname"><span class="pre">split_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Document</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.rag_or_search.tools.rag_utils.Settings" title="src.rag_or_search.tools.rag_utils.Settings"><span class="pre">Settings</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Document</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.rag_or_search.tools.rag_utils.split_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Apply robust splitting to optimize retrieval.</p>
+<p>Splits documents into smaller chunks using RecursiveCharacterTextSplitter
+with configurable chunk size and overlap to optimize retrieval performance.</p>
+<section id="id35">
+<h2>Args<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>docs<span class="classifier">list of Document</span></dt><dd><p>Input documents to split into chunks.</p>
+</dd>
+<dt>settings<span class="classifier">Settings</span></dt><dd><p>Chunking configuration including chunk_size and chunk_overlap.</p>
+</dd>
+</dl>
+</section>
+<section id="id36">
+<h2>Returns<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>list of Document</dt><dd><p>List of Document objects representing the resulting chunks.</p>
+</dd>
+</dl>
+</section>
+<section id="id37">
+<h2>Examples<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">docs</span> <span class="o">=</span> <span class="n">simulate_corpus</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">chunk_overlap</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chunks</span> <span class="o">=</span> <span class="n">split_documents</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">docs</span><span class="p">))</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<p id="module-src.rag_or_search.tools.rag">CrewAI tool that wraps simple RAG retrieval utilities.</p>
+<p>Accepts a question and a <code class="docutils literal notranslate"><span class="pre">k</span></code> value to retrieve top-k contexts from a local
+vector store. Useful as an agent tool step before generation.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag.RagTool">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag.</span></span><span class="sig-name descname"><span class="pre">RagTool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'RAG</span> <span class="pre">Search</span> <span class="pre">Tool'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&quot;A</span> <span class="pre">tool</span> <span class="pre">that</span> <span class="pre">performs</span> <span class="pre">a</span> <span class="pre">Retrieval-Augmented</span> <span class="pre">Generation</span> <span class="pre">(RAG)</span> <span class="pre">search</span> <span class="pre">given</span> <span class="pre">a</span> <span class="pre">question</span> <span class="pre">and</span> <span class="pre">a</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">documents</span> <span class="pre">to</span> <span class="pre">retrieve.</span> <span class="pre">Uses</span> <span class="pre">a</span> <span class="pre">local</span> <span class="pre">vector</span> <span class="pre">store</span> <span class="pre">and</span> <span class="pre">LLM</span> <span class="pre">to</span> <span class="pre">retrieve</span> <span class="pre">and</span> <span class="pre">answer</span> <span class="pre">based</span> <span class="pre">on</span> <span class="pre">context.</span> <span class="pre">Returns</span> <span class="pre">a</span> <span class="pre">dictionary</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">form</span> <span class="pre">{</span> <span class="pre">'source':</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'document':</span> <span class="pre">str</span> <span class="pre">}&quot;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_vars:</span> <span class="pre">~typing.List[~crewai.tools.base_tool.EnvVar]</span> <span class="pre">=</span> <span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args_schema:</span> <span class="pre">~typing.Type[~pydantic.main.BaseModel]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'src.rag_or_search.tools.rag.RagToolInput'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description_updated:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_function:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">BaseTool.&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_as_answer:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_usage_count:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_usage_count:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.rag.RagTool" title="Link to this definition">¶</a></dt>
+<dd><p>CrewAI tool that performs a simple RAG retrieval.</p>
+<section id="id38">
+<h2>Notes<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h2>
+<p>The tool returns contexts as a mapping of <code class="docutils literal notranslate"><span class="pre">source</span></code> to text and does not
+perform generation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag.RagTool.args_schema">
+<span class="sig-name descname"><span class="pre">args_schema</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseModel</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.rag_or_search.tools.rag.RagTool.args_schema" title="Link to this definition">¶</a></dt>
+<dd><p>The schema for the arguments that the tool accepts.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag.RagTool.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag.RagTool.description" title="Link to this definition">¶</a></dt>
+<dd><p>Used to tell the model how/when/why to use the tool.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag.RagTool.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'arbitrary_types_allowed':</span> <span class="pre">True}</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag.RagTool.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag.RagTool.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag.RagTool.name" title="Link to this definition">¶</a></dt>
+<dd><p>The unique name of the tool that clearly communicates its purpose.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag.RagToolInput">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.rag.</span></span><span class="sig-name descname"><span class="pre">RagToolInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">question</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.rag.RagToolInput" title="Link to this definition">¶</a></dt>
+<dd><p>Input schema for <code class="docutils literal notranslate"><span class="pre">RagTool</span></code>.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>question<span class="classifier">str</span></dt><dd><p>Question to answer using RAG search.</p>
+</dd>
+<dt>k<span class="classifier">int</span></dt><dd><p>Number of documents to retrieve for context.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag.RagToolInput.k">
+<span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag.RagToolInput.k" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag.RagToolInput.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag.RagToolInput.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.rag.RagToolInput.question">
+<span class="sig-name descname"><span class="pre">question</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.rag_or_search.tools.rag.RagToolInput.question" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<p id="module-src.rag_or_search.tools.image_generation_tool">Image generation tool for CrewAI agents.</p>
+<p>This module provides a tool for generating images using Azure OpenAI’s DALL-E API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.GenerateImageInput">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.image_generation_tool.</span></span><span class="sig-name descname"><span class="pre">GenerateImageInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.GenerateImageInput" title="Link to this definition">¶</a></dt>
+<dd><p>Input schema for <code class="docutils literal notranslate"><span class="pre">GenerateImageTool</span></code>.</p>
+<section id="id39">
+<h2>Parameters<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>prompt<span class="classifier">str</span></dt><dd><p>Description of the image to generate.</p>
+</dd>
+<dt>path<span class="classifier">str</span></dt><dd><p>Path to the folder where image should be saved.</p>
+</dd>
+<dt>security_context<span class="classifier">Any</span></dt><dd><p>Security context for the image generation.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.GenerateImageInput.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'defer_build':</span> <span class="pre">True,</span> <span class="pre">'extra':</span> <span class="pre">'allow'}</span></em><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.GenerateImageInput.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.GenerateImageInput.path">
+<span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.GenerateImageInput.path" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.GenerateImageInput.prompt">
+<span class="sig-name descname"><span class="pre">prompt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.GenerateImageInput.prompt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.GenerateImageInput.security_context">
+<span class="sig-name descname"><span class="pre">security_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.GenerateImageInput.security_context" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.ImageGenerationTool">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rag_or_search.tools.image_generation_tool.</span></span><span class="sig-name descname"><span class="pre">ImageGenerationTool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'Image</span> <span class="pre">Generation</span> <span class="pre">Tool'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'A</span> <span class="pre">tool</span> <span class="pre">to</span> <span class="pre">generate</span> <span class="pre">images</span> <span class="pre">based</span> <span class="pre">on</span> <span class="pre">a</span> <span class="pre">description.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_vars:</span> <span class="pre">~typing.List[~crewai.tools.base_tool.EnvVar]</span> <span class="pre">=</span> <span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args_schema:</span> <span class="pre">~typing.Type[~openai.BaseModel]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'src.rag_or_search.tools.image_generation_tool.GenerateImageInput'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description_updated:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_function:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">BaseTool.&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_as_answer:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_usage_count:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_usage_count:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.ImageGenerationTool" title="Link to this definition">¶</a></dt>
+<dd><p>CrewAI tool that generates images based on a description.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.ImageGenerationTool.args_schema">
+<span class="sig-name descname"><span class="pre">args_schema</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseModel</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.ImageGenerationTool.args_schema" title="Link to this definition">¶</a></dt>
+<dd><p>The schema for the arguments that the tool accepts.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.ImageGenerationTool.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.ImageGenerationTool.description" title="Link to this definition">¶</a></dt>
+<dd><p>Used to tell the model how/when/why to use the tool.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.ImageGenerationTool.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'arbitrary_types_allowed':</span> <span class="pre">True}</span></em><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.ImageGenerationTool.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.rag_or_search.tools.image_generation_tool.ImageGenerationTool.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.rag_or_search.tools.image_generation_tool.ImageGenerationTool.name" title="Link to this definition">¶</a></dt>
+<dd><p>The unique name of the tool that clearly communicates its purpose.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-src.rag_or_search.crews.teachercrew.teachercrew"><span id="module-src.rag_or_search.crews.imagecrew.imagecrew"></span>Crew definition for generating outlines and explanatory documents.</p>
+<p id="module-src.rag_or_search.crews.ragcrew.ragcrew">Crew definition for a RAG-oriented workflow.</p>
+<p id="module-src.rag_or_search.crews.mathcrew.mathcrew">Crew definition for handling math-related queries.</p>
+<p>Defines agents and tasks to translate math problems to code and execute them
+with an interpreter tool.</p>
 </section>
 
 
@@ -50,7 +733,7 @@ documentation for details.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">RAG, search and math agent</a></h1>
+<h1 class="logo"><a href="#">RAG, search and solve math</a></h1>
 
 
 
@@ -90,7 +773,7 @@ documentation for details.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &#169;2025, Alessio Buda.
+      &#169;2025, Maci, Giacobbe, Buda, Meziane.
       
       |
       Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>

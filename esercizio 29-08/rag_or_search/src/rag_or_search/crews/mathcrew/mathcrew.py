@@ -28,7 +28,23 @@ class Mathcrew():
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def math_translator(self) -> Agent:
-        """Agent that rewrites natural language math problems into formal math."""
+        """Agent that rewrites natural language math problems into formal math.
+
+        Creates a math translation agent configured to convert natural language
+        mathematical problems into formal mathematical expressions.
+
+        Returns
+        -------
+        Agent
+            A configured CrewAI agent specialized in mathematical translation.
+
+        Examples
+        --------
+        >>> crew = Mathcrew()
+        >>> agent = crew.math_translator()
+        >>> print(type(agent))
+        <class 'crewai.agent.Agent'>
+        """
         return Agent(
             config=self.agents_config['math_translator'], # type: ignore[index]
             verbose=True
@@ -36,7 +52,23 @@ class Mathcrew():
 
     @agent
     def math_to_code_translator(self) -> Agent:
-        """Agent that converts math expressions into runnable code."""
+        """Agent that converts math expressions into runnable code.
+
+        Creates a math-to-code translation agent configured to convert
+        formal mathematical expressions into executable code.
+
+        Returns
+        -------
+        Agent
+            A configured CrewAI agent specialized in math-to-code translation.
+
+        Examples
+        --------
+        >>> crew = Mathcrew()
+        >>> agent = crew.math_to_code_translator()
+        >>> print(type(agent))
+        <class 'crewai.agent.Agent'>
+        """
         return Agent(
             config=self.agents_config['math_to_code_translator'], # type: ignore[index]
             verbose=True
@@ -44,7 +76,23 @@ class Mathcrew():
         
     @agent
     def math_executor(self) -> Agent:
-        """Agent that executes generated code using a code interpreter tool."""
+        """Agent that executes generated code using a code interpreter tool.
+
+        Creates a math execution agent configured with the CodeInterpreterTool
+        to execute generated mathematical code and return results.
+
+        Returns
+        -------
+        Agent
+            A configured CrewAI agent with code execution capabilities.
+
+        Examples
+        --------
+        >>> crew = Mathcrew()
+        >>> agent = crew.math_executor()
+        >>> print(type(agent))
+        <class 'crewai.agent.Agent'>
+        """
         return Agent(
             config=self.agents_config['math_executor'], # type: ignore[index]
             verbose=True,
@@ -56,28 +104,92 @@ class Mathcrew():
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
     def math_translation_task(self) -> Task:
-        """Task that produces a formal math representation from a problem statement."""
+        """Task that produces a formal math representation from a problem statement.
+
+        Creates a math translation task configured to convert natural language
+        mathematical problems into formal mathematical expressions.
+
+        Returns
+        -------
+        Task
+            A configured CrewAI task for mathematical translation operations.
+
+        Examples
+        --------
+        >>> crew = Mathcrew()
+        >>> task = crew.math_translation_task()
+        >>> print(type(task))
+        <class 'crewai.task.Task'>
+        """
         return Task(
             config=self.tasks_config['math_translation_task'], # type: ignore[index]
         )
 
     @task
     def math_to_code_task(self) -> Task:
-        """Task that generates code implementing the translated math."""
+        """Task that generates code implementing the translated math.
+
+        Creates a math-to-code task configured to convert formal mathematical
+        expressions into executable code implementations.
+
+        Returns
+        -------
+        Task
+            A configured CrewAI task for math-to-code conversion operations.
+
+        Examples
+        --------
+        >>> crew = Mathcrew()
+        >>> task = crew.math_to_code_task()
+        >>> print(type(task))
+        <class 'crewai.task.Task'>
+        """
         return Task(
             config=self.tasks_config['math_to_code_task'], # type: ignore[index]
         )
         
     @task
     def math_execution_task(self) -> Task:
-        """Task that executes the generated code and returns the result."""
+        """Task that executes the generated code and returns the result.
+
+        Creates a math execution task configured to execute generated
+        mathematical code and return the calculated results.
+
+        Returns
+        -------
+        Task
+            A configured CrewAI task for mathematical code execution operations.
+
+        Examples
+        --------
+        >>> crew = Mathcrew()
+        >>> task = crew.math_execution_task()
+        >>> print(type(task))
+        <class 'crewai.task.Task'>
+        """
         return Task(
             config=self.tasks_config['math_execution_task'], # type: ignore[index]
         )
 
     @crew
     def crew(self) -> Crew:
-        """Create and return the math-oriented crew."""
+        """Create and return the math-oriented crew.
+
+        Assembles and configures a CrewAI crew with math translation, code
+        generation, and execution agents and tasks for mathematical problem solving.
+
+        Returns
+        -------
+        Crew
+            A configured CrewAI crew ready for mathematical problem solving tasks.
+
+        Examples
+        --------
+        >>> crew_instance = Mathcrew()
+        >>> crew = crew_instance.crew()
+        >>> print(type(crew))
+        <class 'crewai.crew.Crew'>
+        """
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

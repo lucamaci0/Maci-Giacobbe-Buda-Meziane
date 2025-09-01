@@ -1,9 +1,9 @@
-.. RAG, search and math agent documentation master file, created by
-   sphinx-quickstart on Fri Aug 29 12:45:08 2025.
+.. RAG, search and solve math documentation master file, created by
+   sphinx-quickstart on Mon Sep  1 11:35:32 2025.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-RAG, search and math agent documentation
+RAG, search and solve math documentation
 ========================================
 
 Add your content using ``reStructuredText`` syntax. See the
@@ -15,42 +15,42 @@ documentation for details.
    :maxdepth: 2
    :caption: Contents:
 
-
-API Reference
--------------
-
-.. automodule:: rag_or_search
+.. automodule:: src.rag_or_search.main
    :members:
    :undoc-members:
 
-.. automodule:: rag_or_search.main
+.. automodule:: src.rag_or_search.tools.rag_utils
    :members:
    :undoc-members:
 
-.. automodule:: rag_or_search.tools.rag_utils
+.. automodule:: src.rag_or_search.tools.rag
    :members:
    :undoc-members:
 
-.. automodule:: rag_or_search.tools.rag
+.. automodule:: src.rag_or_search.tools.image_generation_tool
    :members:
    :undoc-members:
 
-.. automodule:: rag_or_search.tools.search
+.. automodule:: src.rag_or_search.tools.search
    :members:
    :undoc-members:
 
-.. automodule:: rag_or_search.crews.mathcrew.mathcrew
+.. automodule:: src.rag_or_search.crews.searchcrew.searchcrew
    :members:
    :undoc-members:
 
-.. automodule:: rag_or_search.crews.ragcrew.ragcrew
+.. automodule:: src.rag_or_search.crews.imagecrew.imagecrew
    :members:
    :undoc-members:
 
-.. automodule:: rag_or_search.crews.searchcrew.searchcrew
+.. automodule:: src.rag_or_search.crews.teachercrew.teachercrew
    :members:
    :undoc-members:
 
-.. automodule:: rag_or_search.crews.teachercrew.teachercrew
+.. automodule:: src.rag_or_search.crews.ragcrew.ragcrew
+   :members:
+   :undoc-members:
+
+.. automodule:: src.rag_or_search.crews.mathcrew.mathcrew
    :members:
    :undoc-members:
