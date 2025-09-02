@@ -166,12 +166,7 @@ class RAGSearchFlow(Flow[RAGSearchState]):
     def generate_ai_act(self):
         """Generate an AI Act compliance report for the flow."""
         print("SONO QUI DENTRO GENERATE!!!")
-        AI_Act_Crew = Aiactcrew()
-        report = AI_Act_Crew.crew().kickoff(
-            inputs={
-                'url': 'https://aloosley.github.io/techops/template-application-documentation/'
-            }
-        )
+        report = Aiactcrew().crew().kickoff()
         print(report)
         
         return report

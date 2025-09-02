@@ -1,95 +1,116 @@
-
-# AI Act Compliance Documentation
-
-## Application Documentation Template
-
-### Key Links
-- [Project Documentation](#) `[PLACEHOLDER: Insert documentation access link]`
-- [Additional Resources](#) `[PLACEHOLDER: Link to additional resources, if available]`
-
-### General Information
-**Application Name**: RAG, search and solve math  
-**Description**: Utility functions and tools for building and querying a simple RAG pipeline. This application supports document retrieval, embedding creation, prompt formatting, and answers generation while enabling additional capabilities such as RAG retrieval and image generation.  
-**Purpose**: Solving mathematical problems, retrieving contextual documents, and generating content based on queries.  
-
-### Risk Classification
-**Risk Level**: `[PLACEHOLDER: Determine risk level according to AI Act requirements (e.g., low, medium, high risk)]`  
-**Reasoning**: `[PLACEHOLDER: Provide reasoning behind the risk classification]`  
-
-### Application Functionality
-#### Utility Functions
-- **Settings**: Configuration setup for RAG utilities, including chunk size, retrieval methods, and embedding details.
-- **build_faiss_vectorstore**: Creates and persists FAISS index from document chunks.
-- **format_docs_for_prompt**: Prepares a prompt context string with source citations.
-- **get_contexts_for_question**: Retrieves the top-k document chunks relevant to a query.
-- **get_embeddings**: Initializes an Azure OpenAI embeddings client.
-- **split_documents**: Splits documents into manageable chunks for better retrieval.
-- **rag_answer**: Executes a RAG pipeline for answering a user query.
-
-#### Tools
-- **RagTool**: Performs RAG retrieval given a question and the number of documents to return.
-- **ImageGenerationTool**: Generates images using Azure OpenAI's DALL-E API.
-
-### Models and Datasets
-#### Models
-[PLACEHOLDER: Fill in details on the models, such as the Azure OpenAI embeddings, the DALL-E model for image generation, etc.]
-
-#### Datasets
-[PLACEHOLDER: Provide details on the datasets used for retrieval, training, or testing, if applicable.]
-
-### Deployment
-#### Infrastructure and Environment Details
-**Environment Variables**:
-- `AZURE_API_BASE`
-- `AZURE_API_KEY`
-- `AZURE_API_VERSION`
-- `MODEL`
-
-**FAISS Index Directory**: `faiss_index_example`  
-**Deployment Methodology**: `[PLACEHOLDER: Describe deployment methodologies, e.g., cloud-based infrastructure, CI/CD pipelines used.]`
-
-#### Integration with External Systems
-- **Integrated APIs**: Azure OpenAI API for embeddings and DALL-E image generation  
-- **Interaction**: External services facilitate retrieval, chunk indexing, and answer generation. `[PLACEHOLDER: Add detailed API interaction data.]`
-
-### Deployment Plan
-[PLACEHOLDER: Outline the deployment process, timeline, and stages.]
-
-### Lifecycle Management
-#### Risk Management System
-[PLACEHOLDER: Describe the risk management system applied during the lifecycle of the application, including monitoring and mitigation strategies.]
-
-### Testing and Validation (Accuracy, Robustness, Cybersecurity)
-#### Accuracy Throughout the Lifecycle
-[PLACEHOLDER: Explain how accuracy is validated and maintained during operation.]
-
-#### Robustness
-- **Features**: Ability to handle diverse query formats, overlapping document contexts, and embedding variability.  
-- **Testing**: `[PLACEHOLDER: Provide details on robustness testing performed and results.]`
-
-#### Cybersecurity
-- **Environment Security**: Utilizes API keys and environment variables for authentication.  
-- `[PLACEHOLDER: Add details on cybersecurity best practices and protocols followed.]`
-
-### Human Oversight
-[PLACEHOLDER: Mention mechanisms for human oversight, such as manual validation checks or user feedback processes.]
-
-### Incident Management
-#### Troubleshooting AI Application Deployment
-[PLACEHOLDER: Detailed steps for identifying and resolving application issues.]
-
-#### EU Declaration of Conformity
-[PLACEHOLDER: Detail conformity processes implemented according to EU AI regulations.]
-
-#### Standards Applied
-[PLACEHOLDER: Mention applicable standards (e.g., ISO/IEC standards, GDPR compliance).]
-
-### Documentation Metadata
-**Template Version**: `[PLACEHOLDER: Specify version of the template used for documentation.]`  
-**Documentation Authors**: `[PLACEHOLDER: Include author details.]`
-
----
-**End of Document**
+```json
+{
+  "AIActComplianceDocument": {
+    "title": "EU AI Act Compliance Document for 'RAG, search and solve math documentation'",
+    "sections": [
+      {
+        "id": "general-information",
+        "title": "General Information",
+        "content": {
+          "description": "Documentation for utility functions to build and query a simple Retrieval-Augmented Generation (RAG) pipeline.",
+          "purpose_intended_use": {
+            "purpose": "To provide tools for building and querying a Retrieval-Augmented Generation pipeline aimed at solving information retrieval and mathematical query tasks.",
+            "sector": "AI/ML solutions for knowledge retrieval and computational assistance.",
+            "problem_statement": "The application addresses the problem of efficient knowledge retrieval from textual data and question answering.",
+            "target_users": "Developers, AI researchers, and knowledge management professionals.",
+            "stakeholders": "AI solution providers, tech companies, educational institutions.",
+            "goals_kpis": "Optimize query accuracy, reduce retrieval latency, ensure robust handling of various document formats.",
+            "ethical_implications": "Consider potential bias in document embeddings and ensure transparency around data usage.",
+            "prohibited_uses": "Use in scenarios promoting misinformation, violating privacy regulations, or ethical/scientific misconduct.",
+            "operational_environment": "Cloud-based deployment with potential integration into mobile and desktop applications."
+          }
+        }
+      },
+      {
+        "id": "risk-classification",
+        "title": "Risk Classification",
+        "content": {
+          "risk_level": "Limited Risk (Chapter IV Article 50)",
+          "reasoning": "The application handles knowledge retrieval and generation tasks, which are considered medium-stakes applications with limited risk profile under the EU AI Act."
+        }
+      },
+      {
+        "id": "application-functionality",
+        "title": "Application Functionality",
+        "content": {
+          "instructions_for_deployers": {
+            "model_capabilities": {
+              "capabilities": "Handles efficient document querying, builds FAISS vector stores, and enables formatted document chunk generation.",
+              "limitations": "Limited to existing document corpus and dependent on retrieval/matching accuracy of embeddings."
+            },
+            "supported_languages_data_formats": "Supports text-based formats; optimized for English language documents.",
+            "input_requirements": "Requires well-formatted textual data as input for effective processing.",
+            "output_explanation": "Generates retrieved contexts and answers formatted for user questions. Provides context citations with uncertainty measures.",
+            "architecture": "Built around FAISS for vector retrieval, OpenAI embeddings for document representation, and a pipeline integrating document loading, splitting, and query search."
+          }
+        }
+      },
+      {
+        "id": "models-and-datasets",
+        "title": "Models and Datasets",
+        "content": {
+          "models": [
+            {
+              "name": "Azure OpenAI Embeddings",
+              "description": "Pretrained language models used to generate vector embeddings suited for semantic search."
+            },
+            {
+              "name": "Azure OpenAI Chat Models",
+              "description": "Used for generating human-readable answers to user queries with context integration via RAG."
+            }
+          ],
+          "datasets": [
+            {
+              "name": "Simulated AI/ML Corpus",
+              "description": "Generated corpus containing predefined document examples simulating AI/ML technical scenarios."
+            },
+            {
+              "name": "User-loaded Documents",
+              "description": "External user-loaded text documents processed and indexed for query capabilities."
+            }
+          ]
+        }
+      },
+      {
+        "id": "configuration",
+        "title": "Configuration",
+        "content": {
+          "attributes": {
+            "persist_dir": "Directory where the FAISS index is stored. Default value: 'faiss_index_example'.",
+            "chunk_size": "Maximum chunk size for splitting. Default value: 1000.",
+            "chunk_overlap": "Overlap between chunks during splitting. Default value: 100.",
+            "search_type": "Retrieval mode, either 'mmr' or 'similarity'. Default value: 'mmr'.",
+            "k": "Number of final retrieved documents. Default value: 1.",
+            "fetch_k": "Candidate pool size for MMR searches. Default value: 20.",
+            "mmr_lambda": "Balance for MMR retrieval: 0 for diversity; 1 for relevance. Default value: 1.0.",
+            "lmstudio_model_env": "Env variable for the Azure OpenAI model name. Default value: 'MODEL'."
+          }
+        }
+      },
+      {
+        "id": "deployment",
+        "title": "Deployment",
+        "content": {
+          "infrastructure_environment_details": {
+            "cloud_setup": "Azure cloud deployment using Azure OpenAI services for embeddings and chat models.",
+            "required_resources": "Compute resources required include Azure VMs or Kubernetes clusters with sufficient GPU acceleration for embedding query workloads.",
+            "network_setup": "Appropriate VPC setup, subnets for restricted access, and security groups for role-based data access.",
+            "api_details": [
+              {
+                "endpoint": "/query",
+                "payload_structure": "JSON: { 'question': string, 'k': integer }",
+                "authentication": "API keys with role-based access."
+              },
+              {
+                "endpoint": "/load_documents",
+                "payload_structure": "JSON: { 'file_path': string, 'file_format': string }",
+                "authentication": "API keys required."
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
 ```
-
-This draft organizes the available project information and introduces placeholders for sections requiring additional input.

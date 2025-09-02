@@ -1,18 +1,23 @@
 parse_docs:
-  description: Load and parse the given Sphinx docs to extract structured project information.
-  expected_output: A structured knowledge base (JSON/dict) of the project documentation.
+  description: >
+    Load and parse the given Sphinx docs to extract structured project information.
+  expected_output: >
+    A structured knowledge base (JSON) of the project documentation.
   agent: doc_parser
-
+ 
 parse_template:
-  description: Parse the AI Act template from the following URL "{url}" and return it as html text.
-  expected_output: A JSON schema with all AI Act fields, nested as per HTML hierarchy.
+  description: >
+    Parse the AI Act template using the specified tool.
+  expected_output: >
+    A JSON schema with all AI Act fields, nested as per HTML hierarchy.
   agent: template_parser
-
+ 
 generate_ai_act:
-  description: Generate a draft AI Act compliance document by filling the schema using project documentation. Missing fields should be filled with descriptive placeholders.
-  expected_output: Draft AI Act document (Markdown/JSON) with project-specific details and placeholders.
+  description: >
+    Generate a draft AI Act compliance document by filling the schema using project documentation. Missing fields should be filled with descriptive placeholders.
+  expected_output: >
+    Draft AI Act document (Markdown/JSON) with project-specific details and placeholders.
   agent: act_document_generator
-  depends_on:
+  context:
     - parse_docs
     - parse_template
-  output_file: outputs/ai_act.md

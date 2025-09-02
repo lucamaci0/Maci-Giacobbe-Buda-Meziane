@@ -33,7 +33,8 @@ class Aiactcrew():
         return Agent(
             config=self.agents_config['template_parser'], # type: ignore[index]
             verbose=True,
-            tools=[FirecrawlScrapeWebsiteTool()]  # TODO: Add when tool is implemented
+            # tools=[FirecrawlScrapeWebsiteTool(url='{url}')]  # TODO: Add when tool is implemented
+            tools=[DocLoaderTool()]  # TODO: Add when tool is implemented
         )
 
     @agent
@@ -48,21 +49,21 @@ class Aiactcrew():
     def parse_docs(self) -> Task:
         return Task(
             config=self.tasks_config['parse_docs'], # type: ignore[index]
-            agent=self.doc_parser()
+            # agent=self.doc_parser()
         )
 
     @task
     def parse_template(self) -> Task:
         return Task(
             config=self.tasks_config['parse_template'], # type: ignore[index]
-            agent=self.template_parser()
+            # agent=self.template_parser()
         )
 
     @task
     def generate_ai_act(self) -> Task:
         return Task(
             config=self.tasks_config['generate_ai_act'], # type: ignore[index]
-            agent=self.act_document_generator(), 
+            # agent=self.act_document_generator(), 
             output_file='outputs/ai_act.md'
         )
 

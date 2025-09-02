@@ -28,7 +28,7 @@ class DocLoaderInput(BaseModel):
     max_file_size : int, optional
         Maximum file size to process in bytes. Defaults to 1MB.
     """
-    docs_path: str = Field(default="docs", description="Path to the documentation folder.")
+    docs: str = Field(default="docs", description="Use 'docs' to read the documentation, use 'template' to read the AI Act template")
     file_types: List[str] = Field(default=[".html"], description="List of file extensions to include (ignored, only reads index.html).")
     include_metadata: bool = Field(default=True, description="Whether to include file metadata in the output.")
     max_file_size: int = Field(default=1048576, description="Maximum file size to process in bytes (1MB default).")
@@ -264,14 +264,14 @@ class DocLoaderTool(BaseTool):
             "relative_path": str(file_path)
         }
 
-    def _run(self, docs_path: str = "docs", file_types: List[str] = None, 
+    def _run(self, docs: str = "docs", file_types: List[str] = None, 
              include_metadata: bool = True, max_file_size: int = 1048576) -> str:
         """Load documentation files and return as JSON.
 
         Args
         ----
-        docs_path : str
-            Path to the documentation folder.
+        docs : str
+            Use 'docs' to read the documentation, use 'template' to read the AI Act template
         file_types : List[str]
             List of file extensions to include (ignored, only reads index.html).
         include_metadata : bool
@@ -291,19 +291,18 @@ class DocLoaderTool(BaseTool):
         ValueError
             If the index.html file cannot be processed.
         """
-        docs_path = r"C:\Users\XZ374JM\OneDrive - EY\Desktop\AI Academy\Maci-Giacobbe-Buda-Meziane\esercizio 29-08\rag_or_search\docs"
-        docs_path = Path(docs_path)
-        
-        # Look for index.html in the _build/html subdirectory
-        index_file = docs_path / "_build" / "html" / "index.html"
-        index_file = Path(index_file)
-        
+        if docs == "docs":
+            docs_path = Path(r"C:\Users\XZ374JM\OneDrive - EY\Desktop\AI Academy\Maci-Giacobbe-Buda-Meziane\esercizio 29-08\rag_or_search\docs")
+            index_file = docs_path / "_build" / "html" / "index.html"
+        elif docs == "template":
+            index_file = Path(r"C:\Users\XZ374JM\OneDrive - EY\Desktop\AI Academy\Maci-Giacobbe-Buda-Meziane\esercizio 29-08\rag_or_search\Application Documentation Template - techops.html")    
+ 
         if not index_file.exists():
             raise FileNotFoundError(f"Index file '{index_file}' does not exist.")
         
         result = {
             "metadata": {
-                "docs_path": str(docs_path),
+                "docs_path": str(docs_path if docs == "docs" else index_file.parent),
                 "file_types": [".html"],
                 "total_files": 1,
                 "processed_files": 0,
