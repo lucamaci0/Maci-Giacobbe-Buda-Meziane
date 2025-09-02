@@ -14,7 +14,9 @@ parse_template:
  
 generate_ai_act:
   description: >
-    Generate a draft AI Act compliance document by filling the schema using project documentation. Missing fields should be filled with descriptive placeholders.
+    Generate a draft AI Act compliance document by filling the schema using project documentation. 
+    Missing fields should be filled with '[PLACEHOLDER, <description>]'.
+    Do not make assumptions that are not based on the documentation you received.
   expected_output: >
     Draft AI Act document (Markdown/JSON) with project-specific details and placeholders.
   agent: act_document_generator
@@ -25,9 +27,12 @@ generate_ai_act:
 fill_placeholders:
   description: >
     Use RAG to search AI Act documentation and regulatory guidance to fill in any placeholder values remaining in the draft AI Act document.
+    Use the placholder description as a guide.
     Search for relevant information to replace placeholders with accurate, regulation-compliant content.
+    When the retrieved content is not relevant enough, leave the placeholder.
   expected_output: >
     Enhanced AI Act document with placeholders filled using RAG-retrieved information, maintaining original content where placeholders could not be improved.
+    Generate a Markdown document.
   agent: rag_placeholder_filler
   context:
     - generate_ai_act

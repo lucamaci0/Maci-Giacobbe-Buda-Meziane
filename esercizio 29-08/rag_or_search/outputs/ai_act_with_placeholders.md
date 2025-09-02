@@ -1,185 +1,143 @@
-```markdown
-# AI Act Compliance Document: RAG, Search and Solve Math Application  
-
-## General Information  
-
-### References  
-- EU AI Act Article 11  
-- Annex IV paragraph 1, 2, 3  
-
-### Purpose and Intended Use  
-- **Purpose**: Provide utility functions for building and querying a simple RAG pipeline to facilitate retrieval, analysis, and mathematical solution generation on user-provided corpus data.  
-- **Sector**: Information Technology and Educational Technology.  
-- **Problem**: Enable efficient document retrieval, summarization, and intelligent context-aware math problem solving.  
-- **Target Users**: Software developers, researchers, educators, and students exploring Retrieval-augmented generation workflows.  
-- **KPIs**:  
-  - Low latency in document retrieval and embedding initialization.  
-  - High accuracy in document retrieval and linguistic relevance.  
-  - Ensure functionality on Azure OpenAI environments.  
-- **Ethical and Regulatory Implications**: Adhere to data privacy standards when loading user-provided documents and using Azure OpenAI services.  
-- **Prohibited Uses**: Misuse for generating harmful, misleading, or ethically questionable outputs without oversight, such as phishing sources, disinformation generation, or unethical math solution manipulations.  
-- **Operational Environment**: The system operates in cloud environments compatible with Azure OpenAI APIs, typically deployed on developer desktops or integrated in SaaS pipelines.  
-
----
-
-## Risk Classification  
-
-### References  
-- Prohibited Risk: EU AI Act Chapter II Article 5  
-- High-Risk: EU AI Act Chapter III, Section 1 Article 6, Article 7  
-- Limited Risk: Chapter IV Article 50  
-
-### Classification  
-- **Classification**: Limited Risk  
-
-### Justification  
-- The application interacts with document repositories that may contain sensitive information; there is low potential harm due to reliance on Azure OpenAI-compliant services for embedding generation. Retrieval systems are non-biometric and avoid sensitive data manipulation risks.  
-
----
-
-## Application Functionality  
-
-### References  
-- EU AI Act Article 11  
-- Annex IV, paragraph 1, 2, 3  
-
-### Instructions for Use  
-- **Deployers**: Use Azure OpenAI endpoints configured with necessary environment variables (e.g., `AZURE_API_KEY`, `AZURE_API_BASE`).  
-
-### Model Capabilities  
-- **Capabilities**:  
-  - Initialize embeddings and chat models.  
-  - Split documents into manageable chunks.  
-  - Retrieve relevant content based on user queries.  
-  - Generate math solutions and context-aware problem-solving.  
-- **Limitations**: The application depends on properly formatted documents and a configured Azure OpenAI environment.  
-
-### Input Data Requirements  
-- **Format**: Input must be provided in Markdown (`.md`) or plain-text formats.  
-- **Examples**: Input documents with proper separators to enable chunking, avoiding excessive complexity or missing delimiters.  
-
-### Output Explanation  
-- **Interpretation**: Outputs include retrieved document contexts with contextual citations (`[source:...]`) and embedded math problem solutions.  
-- **Uncertainty**: Retrieval quality depends on embedding similarity accuracy and RAG pipeline settings (`search_type`, `k`, etc.).  
-
-### System Architecture Overview  
-- **Components**:  
-  - **Datasets**: Preindexed or dynamic corpus files split into chunks.  
-  - **Algorithms**: FAISS-based retrieval, embedding similarity computation, and maximum marginal relevance (MMR).  
-  - **Models**: Azure-based embeddings and optional OpenAI chat models.  
-
----
-
-## Models and Datasets  
-
-### References  
-- EU AI Act Article 11  
-- Annex IV paragraph 2 (d)  
-
-### Models  
-- [Placeholder: Add description links to Azure OpenAI Embedding Models]  
-
-### Datasets  
-- **Corpus Simulation**: Dynamically loaded input provided by the software user.  
-- **Source**: Markdown file datasets parsed via `load_md_documents()` utility.  
-
----
-
-## Deployment  
-
-### Infrastructure and Environment Details  
-
-#### Cloud Setup  
-- **Provider**: Azure Cloud.  
-- **Services**: Embedding generation (via Azure OpenAI API), compute pipelines with FAISS storage.  
-
-#### APIs  
-- **Authentication**: `AZURE_API_KEY`, OAuth, environment variables.  
-- **Endpoints**: [Placeholder: List API endpoints].  
-
-### Integration with External Systems  
-
-#### Dependencies  
-- Azure OpenAI APIs.  
-- FAISS index.  
-
-#### Data Flow Diagrams  
-- [Placeholder: Include diagrams showing data preprocessing, chunking, retrieval, and embedding initialization].  
-
-#### Error Handling  
-- Retries for failed API connections. Validations on input conformity.  
-
-### Deployment Plan  
-
-#### Infrastructure  
-- Work locally using simulated corpus or integrated pipelines in production cloud environments.  
-
-#### Location  
-- Deployment occurs globally on Azure regions adhering to data residency compliance.  
-
----
-
-## Lifecycle Management  
-
-### Monitoring Procedures  
-- **Ethical Compliance**: Ensure retrieved contexts align with acceptable use.  
-- **Version Management**: Track code changes relevant to vector store and retrieval utilities.  
-
-### Metrics  
-- Retrieval accuracy. Chunking error rate. Embedding generation latency.  
-
-### Key Activities  
-- **Monitor**: Retrieval performance trends.  
-- **Fix**: Address indexing misconfigurations.  
-
----
-
-## Risk Management System  
-
-### References  
-- EU AI Act Article 9  
-- EU AI Act Article 11  
-- Annex IV  
-
----
-
-## Testing and Validation  
-
-### References  
-- EU AI Act Article 15  
-
-#### Cybersecurity  
-- **Data Security**: Secure FAISS index file storage using directory paths.  
-
----
-
-## Human Oversight  
-
-### Requirements  
-- Mechanisms for interruptible RAG workflows.  
-
----
-
-## Incident Management  
-
-### Common Issues  
-- Deployment errors likely relevant to Azure services.  
-
----
-
-## EU Declaration of Conformity  
-
-### References  
-- EU AI Act Article 47  
-
----
-
-## Documentation Metadata  
-
-### Template Version  
-- Placeholder: Add applicable version.  
-
-### Authors  
-- **Name**: Placeholder for team member names.  
-- **Role**: Placeholder roles.  
+```json
+{
+  "AI Act Compliance Document": {
+    "Application Documentation Template": {
+      "Application Owner": "[PLACEHOLDER, Name and contact information]",
+      "Document Version": "[PLACEHOLDER, Version controlling this document is highly recommended]",
+      "Reviewers": "[PLACEHOLDER, List reviewers]",
+      "Key Links": [
+        "[PLACEHOLDER, Code Repository]",
+        "[PLACEHOLDER, Deployment Pipeline]",
+        "[PLACEHOLDER, API (Swagger Docs)]",
+        "[PLACEHOLDER, Cloud Account]",
+        "[PLACEHOLDER, Project Management Board]",
+        "[PLACEHOLDER, Application Architecture]"
+      ],
+      "General Information": {
+        "EU AI Act Reference": "Article 11; Annex IV paragraph 1, 2, 3",
+        "Purpose and Intended Use": [
+          "Utility functions for building and querying a simple RAG pipeline.",
+          "The application aims at solving problems related to simplifying document processing, retrieval, and formatting using embeddings and chat models.",
+          "Target users are enterprises requiring document search and math-solving capabilities integrated with Azure OpenAI environments.",
+          "[PLACEHOLDER, Set measurable goals and key performance indicators (KPIs)]",
+          "[PLACEHOLDER, Consider ethical implications and regulatory constraints]",
+          "[PLACEHOLDER, Clear statement on prohibited uses or potential misuse scenarios]",
+          "[PLACEHOLDER, Operational environment: Describe where and how the AI system will operate, such as on mobile devices, cloud platforms, or embedded systems.]"
+        ]
+      },
+      "Risk Classification": {
+        "Prohibited Risk": "EU AI Act Chapter II Article 5",
+        "High-Risk": "EU AI Act Chapter III, Section 1 Article 6, Article 7",
+        "Limited Risk": "Chapter IV Article 50",
+        "Reasoning": "[PLACEHOLDER, High / Limited / Minimal (in accordance with the AI Act)]"
+      },
+      "Application Functionality": {
+        "EU AI Act Reference": "Article 11; Annex IV, paragraph 1, 2, 3",
+        "Features": [
+          "Initialization of embeddings and chat model configurations compatible with Azure OpenAI.",
+          "Document loading or simulation, splitting into manageable chunks, and building or loading FAISS vector stores.",
+          "Retrieval modes include MMR (maximum marginal relevance) or similarity-based search.",
+          "Input Data Requirements: Documents are split into chunks, with default values of `chunk_size=1000` and `chunk_overlap=100`.",
+          "Examples of valid inputs include structured document chunks while invalid inputs are unformatted or corrupted files.",
+          "Output Explanation: Configured prompts and retrieved chunks presented in a formatted context string.",
+          "Architecture Overview: Supported system modules include tools for FAISS vector store storage, retrieval via Azure OpenAI embeddings, and formatting document contents for contextual prompts.",
+          "[PLACEHOLDER, Uncertainty or confidence measures, if applicable]"
+        ]
+      },
+      "Models and Datasets": {
+        "EU AI Act Reference": "Article 11; Annex IV paragraph 2 (d)",
+        "Models": [
+          {
+            "Name": "Azure OpenAI Embeddings",
+            "Source": "Configured via AZURE_API_BASE, AZURE_API_KEY, and AZURE_API_VERSION.",
+            "Description": "Embeddings are initialized using environment variables and configured for document representation."
+          },
+          "[PLACEHOLDER, Add additional models if applicable]"
+        ],
+        "Datasets": [
+          "[PLACEHOLDER, Name: Dataset 1, Source: Describe data inputs stored in FAISS vector stores]",
+          "[PLACEHOLDER, Name: Dataset 2, Source: Describe contextual scenarios simulated from corpus]"
+        ]
+      },
+      "Deployment": {
+        "Infrastructure and Environment Details": {
+          "Cloud Setup": [
+            "Azure cloud is required with mappings to specific environment variables for OpenAI embeddings.",
+            "[PLACEHOLDER, List required services: compute, storage, and databases.]"
+          ],
+          "APIs": [
+            "[PLACEHOLDER, API endpoints, payload structure, authentication methods.]"
+          ]
+        },
+        "Integration with External Systems": "Documentation describes interaction with Azure/OpenAI APIs for embeddings and prompts.",
+        "Deployment Plan": {
+          "Infrastructure": "[PLACEHOLDER, List environments: development, staging, production.]",
+          "Integration Steps": "[PLACEHOLDER, Order of deployment and rollback strategies.]"
+        }
+      },
+      "Lifecycle Management": {
+        "EU AI Act Reference": "Article 11; Annex IV paragraph 6",
+        "Monitoring": [
+          "Configured through Azure OpenAI environment variables and performance reporting.",
+          "[PLACEHOLDER, Versioning and change logs for model updates.]"
+        ],
+        "Metrics": [
+          "[PLACEHOLDER, Application performance: response time, error rate.]",
+          "[PLACEHOLDER, Model performance metrics: accuracy, precision, recall.]",
+          "[PLACEHOLDER, Infrastructure: CPU, memory, network usage.]"
+        ]
+      },
+      "Risk Management": {
+        "EU AI Act Reference": "Article 9, 11; Annex IV",
+        "Assessment": [
+          "[PLACEHOLDER, Risk Assessment Methodology]",
+          "[PLACEHOLDER, Potential Harmful Outcomes]",
+          "[PLACEHOLDER, Likelihood and Severity]"
+        ],
+        "Mitigation Measures": [
+          "[PLACEHOLDER, Preventive Measures]",
+          "[PLACEHOLDER, Protective Measures]"
+        ]
+      },
+      "Testing and Validation": {
+        "EU AI Act Reference": "Article 15",
+        "Accuracy": "Document chunks are indexed using FAISS vector stores; embeddings optimize memory efficiency.",
+        "Robustness": [
+          "[PLACEHOLDER, Adversarial training, stress testing, redundancy.]",
+          "[PLACEHOLDER, Scenario-Based Testing]",
+          "[PLACEHOLDER, Uncertainty Estimation]"
+        ],
+        "Cybersecurity": [
+          "[PLACEHOLDER, Data Security]",
+          "[PLACEHOLDER, Access Control]",
+          "[PLACEHOLDER, Incident Response]"
+        ]
+      },
+      "Human Oversight": {
+        "EU AI Act Reference": "Article 11; Annex IV paragraph 2(e), Article 14",
+        "Mechanisms": [
+          "[PLACEHOLDER, Human-in-the-Loop mechanisms]",
+          "[PLACEHOLDER, Override and Intervention Procedures]",
+          "[PLACEHOLDER, User Instructions and Training]"
+        ]
+      },
+      "Incident Management": {
+        "Problems": [
+          "Infrastructure-Level Issues: Ensuring compatibility with OpenAI API versions and embeddings configurations.",
+          "[PLACEHOLDER, Integration Problems, Model-Level Issues, Safety and Security Issues]",
+          "[PLACEHOLDER, Monitoring and Logging Failures]",
+          "[PLACEHOLDER, Recovery and Rollback]"
+        ]
+      },
+      "EU Declaration of Conformity": "Article 47",
+      "Documentation Metadata": {
+        "Template Version": "[PLACEHOLDER, Specify version]",
+        "Authors": [
+          "[PLACEHOLDER, Name, Team: Owner / Contributor / Manager]",
+          "[PLACEHOLDER, Name, Team: Owner / Contributor / Manager]"
+        ]
+      }
+    }
+  }
+}
 ```
