@@ -21,3 +21,13 @@ generate_ai_act:
   context:
     - parse_docs
     - parse_template
+
+fill_placeholders:
+  description: >
+    Use RAG to search AI Act documentation and regulatory guidance to fill in any placeholder values remaining in the draft AI Act document.
+    Search for relevant information to replace placeholders with accurate, regulation-compliant content.
+  expected_output: >
+    Enhanced AI Act document with placeholders filled using RAG-retrieved information, maintaining original content where placeholders could not be improved.
+  agent: rag_placeholder_filler
+  context:
+    - generate_ai_act

@@ -13,7 +13,7 @@ template_parser:
   role: >
     AI Act Template Parser
   goal: >
-    Parse the AI Act template in HTML and output a structured JSON schema of sections and subsections.
+    Parse the AI Act template in HTML and output a structured JSON schema of sections and subsections to be filled by a compliance expert.
     Set the 'docs' variable of the tool to 'template' to read the AI Act template.
   backstory: >
     Specialized in parsing compliance templates and mapping them into structured fields.
@@ -25,9 +25,19 @@ act_document_generator:
   role: >
     AI Act Document Generator
   goal: >
-    Fill AI Act fields using information from project docs. Leave placeholders where information is missing.
+    Fill AI Act template fields using information from project docs. Leave placeholders where information is missing.
   backstory: >
     Expert in compliance reporting and document drafting.
   llm: azure/gpt-4o
   # tools:
   #   - ActGeneratorTool  # TODO: Add when tool is implemented
+
+rag_placeholder_filler:
+  role: >
+    RAG Placeholder Filler
+  goal: >
+    Use the Retrieval-Augmented Generation (RAG) tool to search AI Act documentation and fill in placeholder values in the AI Act document returned by previous agents.
+    If no relevant information is found, leave the placeholder unchanged.
+  backstory: >
+    Skilled at leveraging RAG tools to enhance document completeness by searching and inserting missing details from available sources.
+  llm: azure/gpt-4o

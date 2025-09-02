@@ -1,3 +1,4 @@
+```markdown
 # AI Act Compliance Document: RAG, Search and Solve Math Application  
 
 ## General Information  
@@ -76,7 +77,7 @@
 - Annex IV paragraph 2 (d)  
 
 ### Models  
-- **Description**: Azure OpenAI embedding models include state-of-the-art language understanding capabilities to enable cognitive search and information retrieval. Detailed model information can be found in their publicly available summaries, compliant with Annex IV, paragraph 2(d). [source:EU AI Act]  
+- [Placeholder: Add description links to Azure OpenAI Embedding Models]  
 
 ### Datasets  
 - **Corpus Simulation**: Dynamically loaded input provided by the software user.  
@@ -94,10 +95,7 @@
 
 #### APIs  
 - **Authentication**: `AZURE_API_KEY`, OAuth, environment variables.  
-- **Endpoints**:  
-  - `/embedding/init`: Initialize embeddings for user documents.  
-  - `/document/retrieve`: Retrieve relevant content chunks based on user queries.  
-  - `/solution/generate`: Solve math problems utilizing context-aware embeddings.  
+- **Endpoints**: [Placeholder: List API endpoints].  
 
 ### Integration with External Systems  
 
@@ -106,7 +104,7 @@
 - FAISS index.  
 
 #### Data Flow Diagrams  
-- Data preprocessing, chunking, retrieval, and embedding initialization processes are visualized in diagrams meeting compliance requirements under Annex IV. [source:EU AI Act]  
+- [Placeholder: Include diagrams showing data preprocessing, chunking, retrieval, and embedding initialization].  
 
 #### Error Handling  
 - Retries for failed API connections. Validations on input conformity.  
@@ -179,8 +177,9 @@
 ## Documentation Metadata  
 
 ### Template Version  
-- **Version**: 1.0.  
+- Placeholder: Add applicable version.  
 
 ### Authors  
-- **Name**: John Doe, Jane Smith.  
-- **Role**: Compliance Lead, Application Developer.
+- **Name**: Placeholder for team member names.  
+- **Role**: Placeholder roles.  
+```
