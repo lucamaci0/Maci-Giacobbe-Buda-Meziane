@@ -263,7 +263,7 @@ class RAGSearchFlow(Flow[RAGSearchState]):
         )
 
         if self.state.tool == "RAG":
-            self.state.result = result + "\n\n" + self.state.result.raw
+            self.state.result = result.raw + "\n\n" + self.state.result.raw
         else:
             self.state.result = result
 
